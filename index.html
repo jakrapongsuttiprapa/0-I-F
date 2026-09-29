@@ -160,6 +160,10 @@ td.c{text-align:center}
 .dev{font-size:12px} .dev.on{color:var(--pass)} .dev.off{color:var(--muted)}
 .viol{color:#FF8A9A;font-weight:800}
 
+.foot{max-width:900px;margin:-30px auto 0;padding:0 16px 34px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.adminlink{display:inline-flex;align-items:center;gap:6px;color:var(--text);text-decoration:none;font-weight:800;font-size:14px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,201,64,.45);background:linear-gradient(135deg,rgba(255,201,64,.16),rgba(124,108,255,.14));box-shadow:0 8px 20px -12px rgba(255,201,64,.8);transition:transform .15s,filter .15s}
+.adminlink:hover{transform:translateY(-2px);filter:brightness(1.15)}
+.admhello{display:inline-block;margin-top:4px;font-size:14px;color:var(--gold);font-weight:700}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0));transform:translateX(-50%);background:rgba(20,26,69,.95);border:1px solid var(--line);color:#fff;padding:12px 18px;border-radius:14px;font-size:15px;z-index:50;max-width:92vw;box-shadow:0 20px 40px -10px rgba(0,0,0,.7);backdrop-filter:blur(10px)}
 @media (max-width:620px){
   .mark{flex-wrap:wrap;gap:14px;padding:20px}
@@ -176,6 +180,7 @@ td.c{text-align:center}
 </head>
 <body>
 <div class="wrap" id="app"></div>
+<footer class="foot hidden" id="foot"><span>ระบบแก้ 0/ร &nbsp;By T.OAT</span><a class="adminlink" id="adminLink" href="?admin=1">🔐 Admin ครูโอ๊ต</a></footer>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -282,6 +287,7 @@ document.addEventListener('visibilitychange',()=>{
 try{new MutationObserver(ms=>{if(!inQuiz||!S)return;if(ms.some(m=>m.type==='characterData')){S.violations=(S.violations||0)+1;persist();toast('ห้ามใช้โปรแกรมแปลภาษาระหว่างทำแบบฝึกหัด')}}).observe(document.body,{subtree:true,characterData:true})}catch(e){}
 
 /* =================== screens =================== */
+function setFoot(show){const f=$('#foot');if(f)f.classList.toggle('hidden',!show)}
 function markHTML(allPass,pass,total){
   const ring=total?`<div class="bigring" style="--p:${Math.round(pass*100/total)}" aria-label="ผ่าน ${pass} จาก ${total} ด่าน"><div><b>${pass}/${total}</b><small>ด่านที่ผ่าน</small></div></div>`:'';
   return `<header class="mark"><div class="grade" aria-hidden="true">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg>${allPass?'<span class="stamp">ผ่าน</span>':''}</div>
@@ -289,7 +295,7 @@ function markHTML(allPass,pass,total){
 }
 
 function renderRegister(msg){
-  inQuiz=false;
+  inQuiz=false; setFoot(true);
   const roomOpts=Array.from({length:ROOMS},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
   app.innerHTML=`${markHTML(false)}
   <div class="sheet">
@@ -352,7 +358,7 @@ function applyServer(res){
 }
 
 function renderHub(){
-  inQuiz=false;
+  inQuiz=false; setFoot(true);
   const u=S.user, list=TOPICS[u.grade]||[];
   const passCount=list.filter(t=>isPass(T(t.id).best,BANK[t.id].length)).length;
   const allPass=passCount===list.length&&list.length>0;
@@ -395,7 +401,7 @@ function startTopic(id,fresh){
 }
 
 function renderQuestion(id){
-  inQuiz=true;
+  inQuiz=true; setFoot(false);
   const st=T(id), run=st.run, topic=TOPIC_BY_ID[id], total=run.order.length, pos=run.answers.length;
   if(pos>=total) return finishTopic(id);
   const {item,opts,sortable}=questionOf(id,run,pos);
@@ -438,7 +444,7 @@ function confetti(){
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.remove()})();
 }
 function finishTopic(id){
-  inQuiz=false;
+  inQuiz=false; setFoot(true);
   const st=T(id), run=st.run, total=run.order.length, topic=TOPIC_BY_ID[id];
   if(!run.done){
     run.done=true; st.attempts=Math.max(st.attempts||0,run.attempt); st.last=run.correct; st.best=Math.max(st.best||0,run.correct);
@@ -461,7 +467,7 @@ function finishTopic(id){
 }
 
 function showLocked(kind){
-  inQuiz=false;
+  inQuiz=false; setFoot(true);
   app.innerHTML=`${markHTML(false)}<div class="sheet lock"><h2>เข้าใช้งานจากเครื่องนี้ไม่ได้</h2>
   <p>${kind==='not_registered'?'ไม่พบชื่อนี้ในระบบของครู (ครูอาจลบรายชื่อออก) ให้แจ้งครูก่อนลงทะเบียนใหม่':'ชื่อนี้ถูกผูกกับเครื่องอื่นแล้ว หนึ่งคนใช้ได้หนึ่งเครื่องเท่านั้น ถ้าเครื่องนี้เป็นของเราจริง ให้แจ้งครูเพื่อปลดล็อก แล้วกดลองอีกครั้ง'}</p>
   <div class="actions"><button class="btn" id="retry">ลองอีกครั้ง</button>${kind==='not_registered'?'<button class="btn ghost" id="reReg">ลงทะเบียนใหม่</button>':''}</div></div>`;
@@ -471,22 +477,24 @@ function showLocked(kind){
 
 /* =================== admin =================== */
 let ADMIN_PIN='', adminRows=[], pollT=null;
+const PIN_SS='fix0r_admin_pin';
+function studentURL(){return location.pathname}
 function renderAdminLogin(msg){
-  document.body.classList.add('adm');
-  app.innerHTML=`${markHTML(false)}<div class="sheet" style="max-width:420px"><h2 style="font-size:21px;margin-bottom:10px">หน้าครู</h2>
+  document.body.classList.add('adm'); setFoot(false);
+  app.innerHTML=`${markHTML(false)}<div class="sheet" style="max-width:420px"><h2 style="font-size:24px;margin-bottom:2px">🔐 Admin ครูโอ๊ต</h2><p class="muted" style="margin:0 0 14px;font-size:15px">ดูคะแนน ปลดล็อกเครื่อง และจัดการรายชื่อนักเรียน</p>
   <form id="pinF" class="form"><div><label for="pin">รหัส PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off"></div>
-  <div class="err">${esc(msg||'')}</div><button class="btn" id="pinBtn">เข้าสู่หน้าครู</button></form></div>`;
+  <div class="err">${esc(msg||'')}</div><button class="btn" id="pinBtn">เข้าสู่ Admin</button><a class="muted" href="${esc(studentURL())}" style="text-align:center;font-size:14px">กลับหน้านักเรียน</a></form></div>`;
   $('#pinF').addEventListener('submit',async e=>{
     e.preventDefault(); const pin=$('#pin').value.trim(); const b=$('#pinBtn'); b.disabled=true;
-    if(!GAS_URL){ if(pin===ADMIN_PIN_OFFLINE){ADMIN_PIN=pin;renderAdmin()}else renderAdminLogin('PIN ไม่ถูกต้อง'); return; }
+    if(!GAS_URL){ if(pin===ADMIN_PIN_OFFLINE){ADMIN_PIN=pin;try{sessionStorage.setItem(PIN_SS,pin)}catch(e){}renderAdmin()}else renderAdminLogin('PIN ไม่ถูกต้อง'); return; }
     const r=await gas({action:'checkPin',pin});
-    if(r.ok){ADMIN_PIN=pin;if(r.passPercent)PASS_PERCENT=+r.passPercent;renderAdmin()} else renderAdminLogin(r.error==='network'?'เชื่อมต่อระบบไม่ได้':'PIN ไม่ถูกต้อง');
+    if(r.ok){ADMIN_PIN=pin;try{sessionStorage.setItem(PIN_SS,pin)}catch(e){}if(r.passPercent)PASS_PERCENT=+r.passPercent;renderAdmin()} else renderAdminLogin(r.error==='network'?'เชื่อมต่อระบบไม่ได้':'PIN ไม่ถูกต้อง');
   });
 }
-function renderAdmin(){
+function renderAdmin(){ setFoot(false);
   const f={g:'',r:'',q:''};
-  app.innerHTML=`<div class="adm-top"><div><h1 style="font-size:24px">หน้าครู ระบบแก้ 0/ร</h1><span class="muted" style="font-size:14px" id="admInfo"></span></div>
-    <div style="display:flex;gap:8px"><button class="btn small ghost" id="csv">ดาวน์โหลด CSV</button><button class="btn small" id="refresh">รีเฟรช</button></div></div>
+  app.innerHTML=`<div class="adm-top"><div><h1 style="font-size:28px;font-weight:900">🔐 Admin ครูโอ๊ต</h1><span class="admhello">สวัสดีครับครูโอ๊ต ระบบแก้ 0/ร</span><br><span class="muted" style="font-size:14px" id="admInfo"></span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn small ghost" id="csv">ดาวน์โหลด CSV</button><button class="btn small" id="refresh">รีเฟรช</button><button class="btn small ghost" id="logout">ออกจาก Admin</button></div></div>
   ${GAS_URL?'':'<div class="note" style="margin-bottom:12px">ยังไม่ได้ใส่ GAS_URL ในไฟล์ จึงยังไม่มีข้อมูลนักเรียน ดูวิธีตั้งค่าใน Code.gs</div>'}
   <div class="filters"><select id="fg"><option value="">ทุกชั้น</option><option value="4">ม.4</option><option value="5">ม.5</option></select>
   <select id="fr"><option value="">ทุกห้อง</option>${Array.from({length:ROOMS},(_,i)=>`<option>${i+1}</option>`).join('')}</select>
@@ -496,6 +504,7 @@ function renderAdmin(){
   const draw=()=>drawAdmin(f);
   $('#fg').onchange=e=>{f.g=e.target.value;draw()}; $('#fr').onchange=e=>{f.r=e.target.value;draw()}; $('#fq').oninput=e=>{f.q=e.target.value.trim().toLowerCase();draw()};
   $('#refresh').onclick=()=>fetchAdmin(draw); $('#csv').onclick=exportCSV;
+  $('#logout').onclick=()=>{clearInterval(pollT);ADMIN_PIN='';try{sessionStorage.removeItem(PIN_SS)}catch(e){}location.href=studentURL()};
   $('#tb').addEventListener('click',async e=>{
     const b=e.target.closest('button[data-act]'); if(!b) return;
     const key=b.dataset.key, row=adminRows.find(r=>r.key===key); if(!row) return;
@@ -551,7 +560,12 @@ function exportCSV(){
 
 /* =================== boot =================== */
 async function boot(){
-  if(/[?&]admin=1/.test(location.search)) return renderAdminLogin();
+  if(/[?&]admin=1/.test(location.search)){
+    let sp='';try{sp=sessionStorage.getItem(PIN_SS)||''}catch(e){}
+    if(sp){ if(!GAS_URL){if(sp===ADMIN_PIN_OFFLINE){ADMIN_PIN=sp;document.body.classList.add('adm');return renderAdmin()}}
+      else{const r=await gas({action:'checkPin',pin:sp});if(r.ok){ADMIN_PIN=sp;if(r.passPercent)PASS_PERCENT=+r.passPercent;document.body.classList.add('adm');return renderAdmin()}} }
+    return renderAdminLogin();
+  }
   S=load();
   if(!S) return renderRegister();
   if(!TOPICS[S.user.grade]){S=null;return renderRegister()}
