@@ -4,183 +4,281 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="google" content="notranslate">
-<meta name="theme-color" content="#0B1030">
+<meta name="theme-color" content="#080B26">
 <title>ระบบแก้ 0/ร</title>
 <style>
 :root{
-  --bg:#0B1030; --bg2:#141A45; --glass:rgba(255,255,255,.06); --glass2:rgba(255,255,255,.1);
-  --line:rgba(255,255,255,.13); --text:#EEF1FF; --muted:#A3AAD0; --ink:#EEF1FF; --ink-soft:#C3C8E6;
-  --pen:#FF4D63; --pen-soft:rgba(255,77,99,.16); --pass:#2EE59D; --pass-soft:rgba(46,229,157,.14);
-  --gold:#FFC940; --violet:#7C6CFF; --hl:#FFC940; --tick:rgba(255,255,255,.12);
-  --font:"Sarabun","Leelawadee UI","Thonburi","Noto Sans Thai","Segoe UI",system-ui,sans-serif;
-  --r-sheet:22px; --r-ctl:14px;
+  --bg:#080B26; --bg2:#10153C; --bg3:#171D4D;
+  --line:rgba(255,255,255,.12); --line2:rgba(255,255,255,.2);
+  --text:#F1F3FF; --soft:#C9CEEE; --muted:#9BA2CC;
+  --ink:#F1F3FF; --ink-soft:#C9CEEE;
+  --pen:#FF4D6A; --pen2:#FF8A5C; --pen-soft:rgba(255,77,106,.15);
+  --pass:#2EE6A0; --pass2:#7CF5C8; --pass-soft:rgba(46,230,160,.14);
+  --gold:#FFC94A; --violet:#7C6CFF; --blue:#4D8DFF; --hl:#FFC94A;
+  --tick:rgba(255,255,255,.11);
+  --font:"Sarabun","Noto Sans Thai","Leelawadee UI","Thonburi","Segoe UI",system-ui,sans-serif;
+  --r-xl:28px; --r-sheet:22px; --r-ctl:14px;
+  --shadow:0 30px 70px -30px rgba(0,0,0,.85);
 }
 *{box-sizing:border-box}
 html{height:100%;-webkit-text-size-adjust:100%;background:var(--bg)}
-body{margin:0;min-height:100%;font-family:var(--font);color:var(--text);font-size:17px;line-height:1.6;background:radial-gradient(1200px 700px at 50% -10%,#232B6B 0%,var(--bg) 60%) fixed,var(--bg);
-  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0);overflow-x:hidden}
-body::before,body::after{content:"";position:fixed;z-index:-1;width:60vmax;height:60vmax;border-radius:50%;filter:blur(90px);opacity:.33;pointer-events:none}
-body::before{background:var(--pen);top:-25vmax;left:-20vmax;animation:drift1 22s ease-in-out infinite alternate}
-body::after{background:var(--pass);bottom:-30vmax;right:-20vmax;animation:drift2 26s ease-in-out infinite alternate}
-@keyframes drift1{to{transform:translate(12vmax,10vmax)}}
-@keyframes drift2{to{transform:translate(-12vmax,-8vmax)}}
+body{margin:0;min-height:100%;font-family:var(--font);color:var(--text);font-size:17px;line-height:1.6;background:var(--bg);overflow-x:hidden;
+  padding:env(safe-area-inset-top,0) env(safe-area-inset-right,0) env(safe-area-inset-bottom,0) env(safe-area-inset-left,0)}
+/* aurora: radial gradients (cheap on Chromebooks — no filter:blur) */
+body::before{content:"";position:fixed;inset:-20%;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(38% 32% at 18% 12%,rgba(255,77,106,.38),transparent 70%),
+    radial-gradient(34% 30% at 85% 18%,rgba(124,108,255,.42),transparent 70%),
+    radial-gradient(40% 36% at 70% 92%,rgba(46,230,160,.30),transparent 70%),
+    radial-gradient(30% 28% at 8% 85%,rgba(77,141,255,.22),transparent 70%);
+  animation:aurora 28s ease-in-out infinite alternate}
+@keyframes aurora{50%{transform:translate(3%,-2%) rotate(3deg)}100%{transform:translate(-3%,2%) rotate(-2deg)}}
+/* dot grid */
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;
+  background-image:radial-gradient(rgba(255,255,255,.22) 1px,transparent 1.2px);background-size:26px 26px;
+  -webkit-mask-image:linear-gradient(to bottom,#000,transparent 75%);mask-image:linear-gradient(to bottom,#000,transparent 75%)}
 button,input,select{font:inherit;color:inherit}
-button{cursor:pointer}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 :focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-.wrap{max-width:900px;margin:0 auto;padding:22px 16px 60px}
+.wrap{max-width:960px;margin:0 auto;padding:22px 16px 60px}
 .hidden{display:none!important}
-.sheet{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.03));border:1px solid var(--line);border-radius:var(--r-sheet);padding:26px 24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
 h1,h2,h3{line-height:1.2;margin:0;letter-spacing:-.01em}
 .muted{color:var(--muted)}
-.btn{position:relative;border:0;background:linear-gradient(135deg,var(--violet),#4D8BFF);color:#fff;border-radius:var(--r-ctl);padding:11px 22px;font-weight:800;min-height:48px;box-shadow:0 10px 24px -10px rgba(124,108,255,.9),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,box-shadow .15s,filter .15s}
-.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.08)}
-.btn:active:not(:disabled){transform:translateY(0)}
+
+/* ---------- surfaces ---------- */
+.sheet{position:relative;background:linear-gradient(165deg,rgba(255,255,255,.085),rgba(255,255,255,.025));border:1px solid var(--line);border-radius:var(--r-sheet);padding:26px 24px;box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.gborder{position:relative}
+.gborder::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;
+  background:linear-gradient(120deg,var(--pen),var(--violet),var(--pass),var(--gold),var(--pen));background-size:300% 300%;animation:pan 9s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+@keyframes pan{to{background-position:300% 0}}
+
+/* ---------- buttons ---------- */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;color:#fff;border-radius:var(--r-ctl);padding:11px 22px;font-weight:800;min-height:48px;
+  background:linear-gradient(135deg,var(--violet),var(--blue));box-shadow:0 12px 26px -12px rgba(124,108,255,.95),inset 0 1px 0 rgba(255,255,255,.3);transition:transform .15s,filter .15s,box-shadow .15s}
+.btn:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.1)}
+.btn:active:not(:disabled){transform:translateY(0) scale(.98)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
-.btn.ghost{background:var(--glass);border:1px solid var(--line);box-shadow:none;color:var(--text)}
-.btn.pen{background:linear-gradient(135deg,var(--pen),#FF8A3D);box-shadow:0 10px 24px -10px rgba(255,77,99,.9)}
-.btn.small{min-height:38px;padding:6px 14px;font-size:15px}
+.btn.ghost{background:rgba(255,255,255,.06);border:1px solid var(--line2);box-shadow:none;color:var(--text)}
+.btn.pen{background:linear-gradient(135deg,var(--pen),var(--pen2));box-shadow:0 12px 26px -12px rgba(255,77,106,.95)}
+.btn.small{min-height:40px;padding:6px 16px;font-size:15px}
+.btn.wide{width:100%}
 
 /* ---------- hero ---------- */
-.mark{position:relative;display:flex;align-items:center;gap:26px;margin:4px 0 22px;padding:26px 26px;border-radius:28px;border:1px solid var(--line);overflow:hidden;
-  background:linear-gradient(120deg,rgba(255,77,99,.18),rgba(124,108,255,.14) 50%,rgba(46,229,157,.16));box-shadow:0 30px 80px -30px rgba(0,0,0,.8)}
-.mark::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.12) 45%,transparent 60%);transform:translateX(-100%);animation:sheen 3.2s 1s ease-in-out}
-@keyframes sheen{to{transform:translateX(100%)}}
-.grade{position:relative;flex:none;font-weight:900;font-size:86px;line-height:1;letter-spacing:-3px;padding:0 6px;
-  background:linear-gradient(180deg,#FF8A9A,var(--pen));-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 8px 24px rgba(255,77,99,.55))}
+.mark{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:26px;margin:4px 0 18px;padding:28px;border-radius:var(--r-xl);overflow:hidden;
+  background:linear-gradient(120deg,rgba(255,77,106,.20),rgba(124,108,255,.16) 48%,rgba(46,230,160,.16)),rgba(16,21,60,.6);box-shadow:var(--shadow)}
+.mark::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.14) 45%,transparent 60%);transform:translateX(-110%);animation:sheen 3.4s .9s ease-in-out}
+@keyframes sheen{to{transform:translateX(110%)}}
+.grade{position:relative;font-weight:900;font-size:92px;line-height:1;letter-spacing:-4px;padding:0 6px;
+  background:linear-gradient(180deg,#FFB0BC,var(--pen) 70%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 10px 26px rgba(255,77,106,.55))}
 .grade svg{position:absolute;left:-2px;top:-6px;width:calc(100% + 4px);height:calc(100% + 12px);overflow:visible}
-.grade path{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:strike .6s .4s cubic-bezier(.6,0,.3,1) forwards;filter:drop-shadow(0 0 6px rgba(255,255,255,.8))}
+.grade path{fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;animation:strike .6s .45s cubic-bezier(.6,0,.3,1) forwards;filter:drop-shadow(0 0 7px rgba(255,255,255,.85))}
 @keyframes strike{to{stroke-dashoffset:0}}
-.mark h1{font-size:34px;font-weight:900;background:linear-gradient(90deg,#fff,#C9CEFF);-webkit-background-clip:text;background-clip:text;color:transparent}
-.mark p{margin:4px 0 0;color:var(--ink-soft);font-size:15px}
-.mark .htext{flex:1;min-width:0}
-.stamp{position:absolute;right:-26px;top:-18px;transform:rotate(-14deg) scale(0);font-size:22px;font-weight:900;padding:2px 12px;border-radius:10px;border:3px solid var(--pass);color:var(--pass);background:rgba(11,16,48,.85);-webkit-text-fill-color:var(--pass);letter-spacing:0;box-shadow:0 0 24px rgba(46,229,157,.6);animation:stampIn .5s 1s cubic-bezier(.2,1.6,.4,1) forwards}
+.stamp{position:absolute;right:-30px;top:-16px;transform:rotate(-14deg) scale(0);font-size:22px;font-weight:900;padding:2px 12px;border-radius:10px;border:3px solid var(--pass);color:var(--pass);-webkit-text-fill-color:var(--pass);background:rgba(8,11,38,.88);letter-spacing:0;box-shadow:0 0 26px rgba(46,230,160,.65);animation:stampIn .5s 1s cubic-bezier(.2,1.6,.4,1) forwards}
 @keyframes stampIn{to{transform:rotate(-14deg) scale(1)}}
-.bigring{flex:none;width:112px;height:112px;border-radius:50%;display:grid;place-items:center;text-align:center;
-  background:conic-gradient(var(--pass) calc(var(--p)*1%),rgba(255,255,255,.1) 0);box-shadow:0 0 40px rgba(46,229,157,calc(var(--p)*.006))}
-.bigring>div{width:88px;height:88px;border-radius:50%;background:var(--bg2);display:grid;place-content:center;line-height:1.1}
-.bigring b{font-size:30px;font-weight:900}.bigring small{font-size:12px;color:var(--muted)}
+.htext{min-width:0}
+.hello{display:block;font-size:15px;font-weight:700;color:var(--gold);margin-bottom:2px}
+.mark h1{font-size:36px;font-weight:900;background:linear-gradient(90deg,#fff,#CFD3FF);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mark p{margin:4px 0 0;color:var(--soft);font-size:15px}
+.who{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line);color:var(--soft)}
+.chip b{color:var(--text)}
+.sync{font-weight:600}
+.sync.bad{color:#FF9AAE;border-color:rgba(255,77,106,.4)}
+.bigring{width:124px;height:124px;border-radius:50%;display:grid;place-items:center;text-align:center;
+  background:conic-gradient(var(--pass) calc(var(--p)*1%),rgba(255,255,255,.1) 0);box-shadow:0 0 44px rgba(46,230,160,calc(var(--p)*.006))}
+.bigring>div{width:98px;height:98px;border-radius:50%;background:var(--bg2);display:grid;place-content:center;line-height:1.1}
+.bigring b{font-size:32px;font-weight:900}.bigring small{font-size:12px;color:var(--muted)}
+
+/* ---------- stat tiles ---------- */
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
+.tile{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:18px;padding:12px 16px}
+.tile small{display:block;font-size:13px;color:var(--muted)}
+.tile b{font-size:26px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.2}
+.tile b span{font-size:15px;color:var(--muted);font-weight:700}
+.tile.good b{color:var(--pass)} .tile.bad b{color:#FF9AAE} .tile.gold b{color:var(--gold)}
+.banner{display:flex;gap:12px;align-items:center;margin-bottom:18px;padding:14px 18px;border-radius:18px;border:1px solid rgba(46,230,160,.45);background:linear-gradient(120deg,rgba(46,230,160,.16),rgba(124,108,255,.1));font-weight:700}
+.banner .bi{font-size:28px}
+
+/* ---------- topic cards ---------- */
+.ledger{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:16px}
+.topic{--h:#7C6CFF;--h2:#4D8DFF;position:relative;overflow:hidden;border-radius:var(--r-sheet);padding:18px 18px 16px;
+  background:linear-gradient(165deg,rgba(255,255,255,.075),rgba(255,255,255,.02)),var(--bg2);border:1px solid var(--line);transition:transform .2s,border-color .2s,box-shadow .2s}
+.topic::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--h),var(--h2))}
+.topic::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(420px 140px at 0 0,color-mix(in srgb,var(--h) 18%,transparent),transparent);opacity:.9}
+.topic:hover{transform:translateY(-3px);border-color:var(--line2);box-shadow:0 22px 44px -24px rgba(0,0,0,.9)}
+.topic.passed{border-color:rgba(46,230,160,.45);box-shadow:0 0 0 1px rgba(46,230,160,.18),0 22px 50px -26px rgba(46,230,160,.55)}
+.t-top{position:relative;z-index:1;display:flex;gap:14px;align-items:center}
+.badge{flex:none;width:66px;height:66px;border-radius:18px;display:grid;place-content:center;text-align:center;line-height:1.05;
+  background:linear-gradient(145deg,var(--h),var(--h2));box-shadow:0 12px 24px -12px var(--h),inset 0 1px 0 rgba(255,255,255,.35);color:#fff}
+.badge small{font-size:11px;font-weight:700;opacity:.85}
+.badge b{font-size:16px;font-weight:900;letter-spacing:-.02em}
+.tt{flex:1;min-width:0}
+.tt h3{font-size:19px;font-weight:800}
+.tt p{margin:2px 0 0;font-size:14px;color:var(--muted)}
+.pill{flex:none;align-self:flex-start;font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;border:1px solid currentColor}
+.pill.ok{color:var(--pass);background:var(--pass-soft)}
+.pill.no{color:#FF9AAE;background:var(--pen-soft)}
+.pill.wait{color:var(--muted)}
+.meter{position:relative;z-index:1;height:10px;border-radius:999px;background:rgba(255,255,255,.08);margin:16px 0 6px}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:inherit;background:linear-gradient(90deg,var(--h),var(--h2));box-shadow:0 0 12px var(--h);transition:width .6s}
+.topic.passed .meter i{background:linear-gradient(90deg,var(--pass),var(--pass2));box-shadow:0 0 12px var(--pass)}
+.meter .pl{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--gold);border-radius:2px;box-shadow:0 0 6px var(--gold)}
+.meter-legend{position:relative;z-index:1;display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.ticks{position:relative;z-index:1;display:grid;grid-template-columns:repeat(50,1fr);gap:2px;margin:10px 0 12px;height:8px}
+.ticks i{background:var(--tick);border-radius:3px}
+.ticks i.y{background:var(--pass);box-shadow:0 0 5px rgba(46,230,160,.7)} .ticks i.n{background:var(--pen);box-shadow:0 0 5px rgba(255,77,106,.6)}
+.t-foot{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+.t-foot .stats span{margin-right:12px}
+.topic .btn:not(.ghost):not(.pen){background:linear-gradient(135deg,var(--h),var(--h2));box-shadow:0 12px 24px -12px var(--h)}
 
 /* ---------- register ---------- */
+.regwrap{display:grid;gap:18px}
 .form{display:grid;gap:16px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
-label{display:block;font-weight:700;font-size:14px;margin-bottom:6px;color:var(--ink-soft)}
-input,select{width:100%;border:1px solid var(--line);border-radius:var(--r-ctl);padding:10px 14px;background:rgba(255,255,255,.07);min-height:50px;color:var(--text);transition:border-color .15s,box-shadow .15s}
+label,.lbl{display:block;font-weight:700;font-size:14px;margin-bottom:6px;color:var(--soft)}
+input,select{width:100%;border:1px solid var(--line2);border-radius:var(--r-ctl);padding:10px 14px;background:rgba(255,255,255,.06);min-height:50px;color:var(--text);transition:border-color .15s,box-shadow .15s,background .15s}
 select option{color:#111}
 input::placeholder{color:rgba(255,255,255,.35)}
-input:focus,select:focus{outline:none;border-color:var(--violet);box-shadow:0 0 0 4px rgba(124,108,255,.25)}
-.err{color:#FF8A9A;font-weight:700;min-height:1.4em;font-size:15px}
-.note{border:1px solid rgba(255,201,64,.35);background:rgba(255,201,64,.1);padding:12px 16px;border-radius:14px;font-size:15px;color:#FFE3A1}
-
-/* ---------- hub ---------- */
-.who{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;margin-bottom:16px;color:var(--ink-soft)}
-.who b{font-size:18px;color:var(--text)}
-.sync{font-size:13px;color:var(--muted)}
-.sync.bad{color:#FF8A9A}
-.ledger{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px}
-.topic{position:relative;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:var(--r-sheet);padding:18px 18px 16px;transition:transform .2s,border-color .2s,box-shadow .2s;overflow:hidden}
-.topic:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.25);box-shadow:0 20px 40px -20px rgba(0,0,0,.8)}
-.topic.passed{border-color:rgba(46,229,157,.5);box-shadow:0 0 0 1px rgba(46,229,157,.2),0 20px 50px -25px rgba(46,229,157,.6)}
-.topic.passed::before{content:"";position:absolute;inset:0;background:radial-gradient(400px 120px at 0 0,rgba(46,229,157,.14),transparent);pointer-events:none}
-.t-head{display:flex;gap:14px;align-items:center}
-.t-head .tt{flex:1;min-width:0}
-.t-head h3{font-size:19px;font-weight:800}
-.t-head p{margin:2px 0 0;font-size:14px;color:var(--muted)}
-.tring{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.1) 0)}
-.tring span{width:46px;height:46px;border-radius:50%;background:var(--bg2);display:grid;place-items:center;font-size:13px;font-weight:900}
-.pill{flex:none;font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;border:1px solid currentColor}
-.pill.ok{color:var(--pass);background:var(--pass-soft)}
-.pill.no{color:#FF8A9A;background:var(--pen-soft)}
-.pill.wait{color:var(--muted)}
-.ticks{display:grid;grid-template-columns:repeat(50,1fr);gap:2px;margin:14px 0 12px;height:10px}
-.ticks i{background:var(--tick);border-radius:3px}
-.ticks i.y{background:var(--pass);box-shadow:0 0 6px rgba(46,229,157,.7)} .ticks i.n{background:var(--pen);box-shadow:0 0 6px rgba(255,77,99,.6)}
-.t-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
-.t-foot .stats span{margin-right:12px}
+input:focus,select:focus{outline:none;border-color:var(--violet);background:rgba(124,108,255,.1);box-shadow:0 0 0 4px rgba(124,108,255,.25)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.seg button{min-height:54px;border-radius:var(--r-ctl);border:1px solid var(--line2);background:rgba(255,255,255,.05);font-weight:900;font-size:18px;color:var(--soft);transition:all .15s}
+.seg button:hover{border-color:var(--violet)}
+.seg button[aria-pressed="true"]{color:#fff;border-color:transparent;background:linear-gradient(135deg,var(--violet),var(--blue));box-shadow:0 10px 22px -10px rgba(124,108,255,.95)}
+.row2b{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.preview{display:flex;flex-wrap:wrap;gap:6px;min-height:30px}
+.preview .chip{font-weight:600}
+.err{color:#FF9AAE;font-weight:700;min-height:1.4em;font-size:15px}
+.note{border:1px solid rgba(255,201,74,.35);background:rgba(255,201,74,.09);padding:12px 16px;border-radius:14px;font-size:15px;color:#FFE4A6}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.step{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--soft);background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:16px;padding:12px}
+.step b{flex:none;width:28px;height:28px;border-radius:9px;display:grid;place-items:center;font-size:14px;color:#fff;background:linear-gradient(135deg,var(--pen),var(--violet))}
 
 /* ---------- quiz ---------- */
-.qbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;font-size:15px;color:var(--ink-soft)}
-.qbar .count{font-weight:900;font-variant-numeric:tabular-nums;font-size:18px;color:var(--text)}
-.qbar .right{display:flex;gap:8px;align-items:center}
-.streak{font-weight:900;color:var(--gold);background:rgba(255,201,64,.12);border:1px solid rgba(255,201,64,.4);border-radius:999px;padding:1px 10px;animation:pop .35s}
-.qcard{margin-top:10px;animation:rise .35s ease-out}
+.qtop{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin:-22px -16px 12px;padding:14px 16px 10px;
+  background:linear-gradient(to bottom,rgba(8,11,38,.94),rgba(8,11,38,.75));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.qmeta{text-align:center;min-width:0}
+.qmeta .tname{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.count{font-weight:900;font-variant-numeric:tabular-nums;font-size:19px}
+.qright{display:flex;gap:8px;align-items:center;font-size:15px;color:var(--soft)}
+.qright b{color:var(--pass)}
+.streak{font-weight:900;color:var(--gold);background:rgba(255,201,74,.12);border:1px solid rgba(255,201,74,.45);border-radius:999px;padding:1px 10px;animation:pop .35s}
+.prog{position:relative;height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;margin-top:10px;grid-column:1/-1}
+.prog i{position:absolute;inset:0 auto 0 0;border-radius:inherit;background:linear-gradient(90deg,var(--h,var(--violet)),var(--h2,var(--blue)));box-shadow:0 0 12px var(--h,var(--violet));transition:width .4s}
+.qcard{--h:#7C6CFF;--h2:#4D8DFF;margin-top:4px;animation:rise .35s ease-out;overflow:hidden}
+.qcard::before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:linear-gradient(90deg,var(--h),var(--h2))}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}}
-.lvl{display:inline-block;font-size:12px;font-weight:900;border-radius:999px;padding:2px 12px;margin-bottom:12px}
-.lvl.l1{background:rgba(77,139,255,.18);color:#8FB5FF}.lvl.l2{background:rgba(255,201,64,.16);color:var(--gold)}.lvl.l3{background:var(--pen-soft);color:#FF8A9A}
-.q{font-size:23px;font-weight:700;margin:0 0 20px;overflow-wrap:anywhere;line-height:1.45}
-.q{white-space:pre-line}
-.passage{white-space:pre-line;font-size:16px;line-height:1.7;background:rgba(0,0,0,.22);border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:0 0 16px;max-height:46vh;overflow:auto;color:var(--ink-soft)}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.lvl{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:900;border-radius:999px;padding:3px 12px}
+.lvl::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.lvl.l1{background:rgba(77,141,255,.18);color:#9CC0FF}.lvl.l2{background:rgba(255,201,74,.15);color:var(--gold)}.lvl.l3{background:var(--pen-soft);color:#FF9AAE}
+.kbd{font-size:12px;color:var(--muted)}
+.kbd kbd{font:inherit;font-weight:800;padding:0 6px;border-radius:6px;border:1px solid var(--line2);background:rgba(255,255,255,.06);color:var(--soft)}
+.q{font-size:23px;font-weight:700;margin:0 0 20px;overflow-wrap:anywhere;line-height:1.45;white-space:pre-line}
+.q u{text-decoration:none;background:linear-gradient(transparent 55%,rgba(255,201,74,.55) 0);padding:0 3px;color:#fff}
+.passage{position:relative;white-space:pre-line;font-size:16px;line-height:1.75;background:rgba(0,0,0,.25);border:1px solid var(--line);border-left:3px solid var(--h);border-radius:16px;padding:14px 16px;margin:0 0 18px;max-height:46vh;overflow:auto;color:var(--soft)}
 .passage .blank{font-weight:800;color:var(--text);white-space:nowrap}
-.passage .blank.on{background:rgba(255,201,64,.25);border:1px solid var(--gold);border-radius:6px;padding:0 4px;color:var(--gold)}
-.rv details{margin-bottom:6px}.rv summary{cursor:pointer;color:var(--muted);font-size:14px}
-.rv .qtext{white-space:pre-line}
-.q u{text-decoration:none;background:linear-gradient(transparent 55%,rgba(255,201,64,.55) 0);padding:0 3px;color:#fff}
+.passage .blank.on{background:rgba(255,201,74,.22);border:1px solid var(--gold);border-radius:6px;padding:0 4px;color:var(--gold);box-shadow:0 0 12px rgba(255,201,74,.35)}
 .opts{display:grid;gap:12px}
-.opt{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:16px;padding:12px 16px;min-height:58px;font-size:17px;color:var(--text);transition:transform .15s,border-color .15s,background .15s}
-.opt .k{flex:none;width:34px;height:34px;border-radius:11px;background:rgba(255,255,255,.1);display:grid;place-items:center;font-weight:900;font-size:14px}
-.opt:hover:not(:disabled){border-color:var(--violet);background:rgba(124,108,255,.14);transform:translateX(4px)}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;width:100%;background:rgba(255,255,255,.045);border:1px solid var(--line);border-radius:16px;padding:12px 16px;min-height:60px;font-size:17px;color:var(--text);transition:transform .15s,border-color .15s,background .15s,opacity .2s}
+.opt .k{flex:none;width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.09);border:1px solid var(--line);display:grid;place-items:center;font-weight:900;font-size:14px;transition:all .15s}
+.opt:hover:not(:disabled){border-color:var(--h,var(--violet));background:rgba(124,108,255,.12);transform:translateX(4px)}
+.opt:hover:not(:disabled) .k{background:var(--h,var(--violet));color:#fff;border-color:transparent}
 .opt:disabled{cursor:default}
-.opt:disabled:not(.right):not(.wrong){opacity:.5}
-.opt.right{border-color:var(--pass);background:var(--pass-soft);box-shadow:0 0 0 1px var(--pass),0 0 30px -6px rgba(46,229,157,.7);animation:pop .4s}
-.opt.right .k{background:var(--pass);color:#062B1B}
+.opt:disabled:not(.right):not(.wrong){opacity:.45}
+.opt.right{border-color:var(--pass);background:var(--pass-soft);box-shadow:0 0 0 1px var(--pass),0 0 30px -6px rgba(46,230,160,.75);animation:pop .4s}
+.opt.right .k{background:var(--pass);color:#062B1B;border-color:transparent}
 .opt.wrong{border-color:var(--pen);background:var(--pen-soft);animation:shake .4s}
-.opt.wrong .k{background:var(--pen);color:#fff}
+.opt.wrong .k{background:var(--pen);color:#fff;border-color:transparent}
 @keyframes pop{50%{transform:scale(1.03)}}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
-.fb{margin-top:18px;border-radius:16px;padding:14px 16px;background:rgba(255,77,99,.1);border:1px solid rgba(255,77,99,.35);animation:rise .3s}
-.fb.good{background:rgba(46,229,157,.1);border-color:rgba(46,229,157,.35)}
-.fb b{display:block;margin-bottom:4px;font-size:17px}
-.fb .good-t{color:var(--pass)} .fb .bad-t{color:#FF8A9A}
-.nextbar{margin-top:18px;display:flex;justify-content:flex-end}
+.fb{display:flex;gap:14px;align-items:flex-start;margin-top:18px;border-radius:18px;padding:14px 16px;background:rgba(255,77,106,.1);border:1px solid rgba(255,77,106,.38);animation:rise .3s}
+.fb.good{background:rgba(46,230,160,.1);border-color:rgba(46,230,160,.38)}
+.fbicon{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-size:20px;font-weight:900;color:#fff;background:var(--pen);box-shadow:0 0 18px rgba(255,77,106,.6)}
+.fb.good .fbicon{background:var(--pass);color:#062B1B;box-shadow:0 0 18px rgba(46,230,160,.6)}
+.fb b{display:block;margin-bottom:2px;font-size:17px}
+.fb p{margin:0;color:var(--soft)}
+.fb .good-t{color:var(--pass)} .fb .bad-t{color:#FF9AAE}
+.nextbar{margin-top:18px;display:flex;justify-content:flex-end;align-items:center;gap:10px}
 
 /* ---------- result ---------- */
-.resultTop{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.scorering{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.1) 0);box-shadow:0 0 60px -10px var(--c);flex:none}
-.scorering>div{width:140px;height:140px;border-radius:50%;background:var(--bg2);display:grid;place-content:center;text-align:center}
-.score{font-size:52px;font-weight:900;line-height:1;margin:0;font-variant-numeric:tabular-nums}
+.result{--h:#7C6CFF;--h2:#4D8DFF;overflow:hidden}
+.result::before{content:"";position:absolute;inset:0 0 auto;height:160px;background:radial-gradient(60% 100% at 20% 0,color-mix(in srgb,var(--c) 22%,transparent),transparent);pointer-events:none}
+.resultTop{position:relative;display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.scorering{width:176px;height:176px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(var(--c) calc(var(--p)*1%),rgba(255,255,255,.1) 0);box-shadow:0 0 60px -10px var(--c)}
+.scorering>div{width:146px;height:146px;border-radius:50%;background:var(--bg2);display:grid;place-content:center;text-align:center}
+.score{font-size:54px;font-weight:900;line-height:1;margin:0;font-variant-numeric:tabular-nums}
 .score small{font-size:22px;color:var(--muted)}
-.review{margin-top:18px;display:grid;gap:10px}
-.rv{border:1px solid var(--line);border-left:4px solid var(--pen);background:rgba(255,255,255,.04);padding:10px 14px;border-radius:12px;font-size:15px}
-.rv .yours{color:#FF8A9A;text-decoration:line-through}
+.tier{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:900;padding:4px 14px;border-radius:999px;margin:6px 0 4px;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);border:1px solid color-mix(in srgb,var(--c) 50%,transparent)}
+.result .tiles{grid-template-columns:repeat(4,1fr);margin:22px 0 0}
+.lvlbars{display:grid;gap:10px;margin-top:18px}
+.lb{display:grid;grid-template-columns:80px 1fr 64px;align-items:center;gap:12px;font-size:14px}
+.lb .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.lb .bar i{display:block;height:100%;border-radius:inherit}
+.lb.l1 .bar i{background:linear-gradient(90deg,#4D8DFF,#9CC0FF)}.lb.l2 .bar i{background:linear-gradient(90deg,#FFB020,var(--gold))}.lb.l3 .bar i{background:linear-gradient(90deg,var(--pen),var(--pen2))}
+.lb span:last-child{text-align:right;font-variant-numeric:tabular-nums;color:var(--soft)}
+.review{margin-top:14px;display:grid;gap:10px}
+.rv{border:1px solid var(--line);border-left:4px solid var(--pen);background:rgba(255,255,255,.04);padding:12px 14px;border-radius:14px;font-size:15px}
+.rv .qtext{white-space:pre-line;margin-bottom:4px}
+.rvl{display:flex;gap:10px;align-items:baseline;margin-top:2px}
+.rk{flex:none;width:56px;font-size:12px;font-weight:800;color:var(--muted)}
+.rvn{margin-top:6px;font-size:14px;color:var(--soft);background:rgba(255,201,74,.07);border-radius:10px;padding:6px 10px}
+.rv .yours{color:#FF9AAE;text-decoration:line-through}
 .rv .ans{color:var(--pass);font-weight:800}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.rv details{margin-bottom:6px}.rv summary{cursor:pointer;color:var(--muted);font-size:14px}
+.rv .passage{max-height:none;margin:8px 0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.sec-h{margin-top:26px;font-size:18px}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:40}
 
 /* ---------- locked ---------- */
-.lock h2{color:#FF8A9A;font-size:26px;margin-bottom:8px}
+.lock h2{color:#FF9AAE;font-size:26px;margin-bottom:8px}
+
+/* ---------- footer ---------- */
+.foot{max-width:960px;margin:-30px auto 0;padding:0 16px 34px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+.adminlink{display:inline-flex;align-items:center;gap:6px;color:var(--text);text-decoration:none;font-weight:800;font-size:14px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,201,74,.45);background:linear-gradient(135deg,rgba(255,201,74,.16),rgba(124,108,255,.14));box-shadow:0 8px 20px -12px rgba(255,201,74,.8);transition:transform .15s,filter .15s}
+.adminlink:hover{transform:translateY(-2px);filter:brightness(1.15)}
 
 /* ---------- admin ---------- */
-.adm .wrap{max-width:1200px}
-.adm-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.adm .wrap{max-width:1220px}
+.adm-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px;padding:20px 22px;border-radius:var(--r-xl);background:linear-gradient(120deg,rgba(255,201,74,.14),rgba(124,108,255,.14)),rgba(16,21,60,.6);border:1px solid var(--line)}
+.admhello{display:inline-block;margin-top:4px;font-size:14px;color:var(--gold);font-weight:700}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .filters input,.filters select{width:auto;min-height:42px;padding:6px 12px}
-.tablebox{overflow-x:auto;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:var(--r-sheet)}
+.tablebox{overflow-x:auto;background:rgba(16,21,60,.7);border:1px solid var(--line);border-radius:var(--r-sheet)}
 table{border-collapse:collapse;width:100%;font-size:14px;min-width:980px}
 th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;white-space:nowrap}
-th{background:rgba(20,26,69,.95);position:sticky;top:0;font-size:13px;color:var(--muted)}
+th{background:rgba(23,29,77,.97);position:sticky;top:0;font-size:13px;color:var(--muted)}
 tbody tr:hover{background:rgba(255,255,255,.04)}
 td.c{text-align:center}
 .cell{display:inline-block;min-width:56px;text-align:center;border-radius:8px;padding:2px 6px;font-weight:800;font-variant-numeric:tabular-nums}
-.cell.ok{background:var(--pass-soft);color:var(--pass)} .cell.no{background:var(--pen-soft);color:#FF8A9A} .cell.none{color:var(--muted);font-weight:400}
+.cell.ok{background:var(--pass-soft);color:var(--pass)} .cell.no{background:var(--pen-soft);color:#FF9AAE} .cell.none{color:var(--muted);font-weight:400}
 .cell small{display:block;font-weight:400;font-size:11px;color:var(--muted)}
 .dev{font-size:12px} .dev.on{color:var(--pass)} .dev.off{color:var(--muted)}
-.viol{color:#FF8A9A;font-weight:800}
+.viol{color:#FF9AAE;font-weight:800}
 
-.foot{max-width:900px;margin:-30px auto 0;padding:0 16px 34px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
-.adminlink{display:inline-flex;align-items:center;gap:6px;color:var(--text);text-decoration:none;font-weight:800;font-size:14px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,201,64,.45);background:linear-gradient(135deg,rgba(255,201,64,.16),rgba(124,108,255,.14));box-shadow:0 8px 20px -12px rgba(255,201,64,.8);transition:transform .15s,filter .15s}
-.adminlink:hover{transform:translateY(-2px);filter:brightness(1.15)}
-.admhello{display:inline-block;margin-top:4px;font-size:14px;color:var(--gold);font-weight:700}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0));transform:translateX(-50%);background:rgba(20,26,69,.95);border:1px solid var(--line);color:#fff;padding:12px 18px;border-radius:14px;font-size:15px;z-index:50;max-width:92vw;box-shadow:0 20px 40px -10px rgba(0,0,0,.7);backdrop-filter:blur(10px)}
-@media (max-width:620px){
-  .mark{flex-wrap:wrap;gap:14px;padding:20px}
-  .grade{font-size:60px}.mark h1{font-size:26px}
-  .bigring{width:92px;height:92px}.bigring>div{width:72px;height:72px}.bigring b{font-size:24px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0));transform:translateX(-50%);background:rgba(23,29,77,.96);border:1px solid var(--line2);color:#fff;padding:12px 18px;border-radius:14px;font-size:15px;z-index:50;max-width:92vw;box-shadow:0 20px 40px -10px rgba(0,0,0,.7)}
+
+@media (max-width:680px){
+  .mark{grid-template-columns:auto 1fr;gap:14px 18px;padding:20px}
+  .mark .bigring{grid-column:1/-1;justify-self:start;width:auto;height:auto;border-radius:16px;background:none;box-shadow:none;display:block;width:100%}
+  .mark .bigring>div{width:100%;height:auto;border-radius:999px;background:rgba(255,255,255,.08);display:flex;align-items:center;gap:10px;padding:8px 14px;position:relative;overflow:hidden}
+  .mark .bigring>div::before{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--p)*1%);background:linear-gradient(90deg,rgba(46,230,160,.45),rgba(46,230,160,.2))}
+  .mark .bigring b,.mark .bigring small{position:relative;font-size:16px}
+  .mark{grid-template-columns:1fr;gap:12px}
+  .grade{font-size:54px;letter-spacing:-3px;justify-self:start}.mark h1{font-size:27px}
+  .hello{font-size:14px}.who{gap:6px;margin-top:10px}.chip{font-size:12px;padding:3px 10px}
+  .tiles{grid-template-columns:repeat(3,1fr);gap:8px}.tile{padding:10px 12px}.tile small{font-size:12px}.tile b{font-size:22px}.tile b span{display:block;font-size:12px;line-height:1.3}
+  .badge{width:58px;height:58px;border-radius:16px}.badge b{font-size:14px}.tt h3{font-size:17px}
+  .result .tiles{grid-template-columns:repeat(2,1fr)}
   .ledger{grid-template-columns:1fr}
-  .row3{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr}
   .q{font-size:19px}
   .sheet{padding:20px 16px}
-  .scorering{width:140px;height:140px}.scorering>div{width:114px;height:114px}.score{font-size:42px}
+  .scorering{width:144px;height:144px}.scorering>div{width:118px;height:118px}.score{font-size:42px}
+  .kbd{display:none}
 }
+@media (hover:none){.kbd{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.grade path{stroke-dashoffset:0}.stamp{transform:rotate(-14deg) scale(1)}.mark::after{display:none}}
 </style>
 </head>
@@ -299,35 +397,58 @@ document.addEventListener('visibilitychange',()=>{
 try{new MutationObserver(ms=>{if(!inQuiz||!S)return;if(ms.some(m=>m.type==='characterData')){S.violations=(S.violations||0)+1;persist();toast('ห้ามใช้โปรแกรมแปลภาษาระหว่างทำแบบฝึกหัด')}}).observe(document.body,{subtree:true,characterData:true})}catch(e){}
 
 /* =================== screens =================== */
-function setFoot(show){const f=$('#foot');if(f)f.classList.toggle('hidden',!show)}
-function markHTML(allPass,pass,total){
+const HUES=[['#7C6CFF','#4D8DFF'],['#22C3FF','#2EE6A0'],['#FF7A59','#FFC94A'],['#FF4D9A','#B26CFF'],['#2EE6A0','#9BEA4A']];
+const TAGS={'m4-1':'How?','m4-2':'How often?','m4-3':'How much?','m4-4':'When?','m4-5':'Where?',
+  'm5-1':'A + N','m5-2':'Order','m5-3':'be + A','m5-4':'look + A','m5-5':'Mix',
+  'm6-1':'A ↔ B','m6-2':'Dialog','m6-3':'Cloze','m6-4':'Read'};
+function topicIndex(id){const l=TOPICS[id.slice(1,2)]||[];return Math.max(0,l.findIndex(t=>t.id===id))}
+function hueVars(id){const h=HUES[topicIndex(id)%HUES.length];return `--h:${h[0]};--h2:${h[1]}`}
+let keyHandler=null;
+document.addEventListener('keydown',e=>{if(keyHandler&&!e.metaKey&&!e.ctrlKey&&!e.altKey)keyHandler(e)});
+function setFoot(show){keyHandler=null;const f=$('#foot');if(f)f.classList.toggle('hidden',!show)}
+function syncLabel(){return GAS_URL?(S&&S.pending?'มีคะแนนที่ยังไม่ได้ส่ง':(syncState||'เชื่อมต่อระบบของครูแล้ว')):'โหมดออฟไลน์ คะแนนอยู่ในเครื่องนี้'}
+function markHTML(allPass,pass,total,user){
   const ring=total?`<div class="bigring" style="--p:${Math.round(pass*100/total)}" aria-label="ผ่าน ${pass} จาก ${total} ด่าน"><div><b>${pass}/${total}</b><small>ด่านที่ผ่าน</small></div></div>`:'';
-  return `<header class="mark"><div class="grade" aria-hidden="true">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg>${allPass?'<span class="stamp">ผ่าน</span>':''}</div>
-  <div class="htext"><h1>ระบบแก้ 0/ร</h1><p>ฝึกทำแบบฝึกหัดให้ผ่านเกณฑ์ ${PASS_PERCENT}% ครบทุกด่าน</p></div>${ring}</header>`;
+  const who=user?`<div class="who"><span class="chip"><b>${esc(user.first)} ${esc(user.last)}</b></span><span class="chip">ม.${esc(user.grade)}/${esc(user.room)} เลขที่ ${esc(user.no)}</span><span class="chip sync${S&&S.pending?' bad':''}" id="sync">${esc(syncLabel())}</span></div>`:'';
+  return `<header class="mark gborder"><div class="grade" aria-hidden="true">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg>${allPass?'<span class="stamp">ผ่าน</span>':''}</div>
+  <div class="htext">${user?`<span class="hello">สวัสดี ${esc(user.first)} พร้อมแก้ 0/ร หรือยัง</span>`:''}<h1>ระบบแก้ 0/ร</h1><p>ฝึกทำแบบฝึกหัดให้ผ่านเกณฑ์ ${PASS_PERCENT}% ครบทุกด่าน</p>${who}</div>${ring}</header>`;
 }
 
 function renderRegister(msg){
   inQuiz=false; setFoot(true);
   const roomOpts=Array.from({length:ROOMS},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
   app.innerHTML=`${markHTML(false)}
+  <div class="regwrap">
   <div class="sheet">
-    <h2 style="font-size:21px;margin-bottom:4px">ลงทะเบียนเข้าฝึก</h2>
-    <p class="muted" style="margin:0 0 16px;font-size:15px">กรอกข้อมูลจริงให้ตรงกับรายชื่อ ชื่อนี้จะผูกกับเครื่องที่ใช้อยู่ตอนนี้ และจะใช้เครื่องอื่นเข้าไม่ได้</p>
+    <h2 style="font-size:23px;margin-bottom:4px">ลงทะเบียนเข้าฝึก</h2>
+    <p class="muted" style="margin:0 0 18px;font-size:15px">กรอกข้อมูลจริงให้ตรงกับรายชื่อ ชื่อนี้จะผูกกับเครื่องที่ใช้อยู่ตอนนี้ และจะใช้เครื่องอื่นเข้าไม่ได้</p>
     <form class="form" id="reg" novalidate>
       <div class="row2">
         <div><label for="fn">ชื่อ</label><input id="fn" autocomplete="off" autocorrect="off" spellcheck="false" placeholder="ไม่ต้องใส่คำนำหน้า" maxlength="40"></div>
         <div><label for="ln">นามสกุล</label><input id="ln" autocomplete="off" autocorrect="off" spellcheck="false" maxlength="40"></div>
       </div>
-      <div class="row3">
-        <div><label for="gr">ชั้น</label><select id="gr"><option value="">เลือก</option><option value="4">ม.4</option><option value="5">ม.5</option><option value="6">ม.6</option></select></div>
+      <div><span class="lbl" id="grLbl">ชั้น</span><input type="hidden" id="gr" value="">
+        <div class="seg" role="radiogroup" aria-labelledby="grLbl">${['4','5','6'].map(g=>`<button type="button" role="radio" aria-pressed="false" aria-checked="false" data-g="${g}">ม.${g}</button>`).join('')}</div></div>
+      <div class="preview" id="pv"></div>
+      <div class="row2b">
         <div><label for="rm">ห้อง</label><select id="rm"><option value="">เลือก</option>${roomOpts}</select></div>
         <div><label for="no">เลขที่</label><input id="no" type="number" inputmode="numeric" min="1" max="${MAX_NO}"></div>
       </div>
-      <div class="err" id="regErr">${esc(msg||'')}</div>
-      <button class="btn" id="regBtn" type="submit">เข้าสู่ระบบฝึก</button>
+      <div class="err" id="regErr" role="alert">${esc(msg||'')}</div>
+      <button class="btn wide" id="regBtn" type="submit">เข้าสู่ระบบฝึก</button>
       ${GAS_URL?'':'<div class="note">ยังไม่ได้เชื่อมต่อระบบของครู ตอนนี้ฝึกได้ แต่คะแนนจะอยู่ในเครื่องนี้เท่านั้น</div>'}
     </form>
+  </div>
+  <div class="steps"><div class="step"><b>1</b><span>เลือกด่านไหนก่อนก็ได้ ด่านละ 50 ข้อ ง่าย กลาง ยากคละกัน</span></div>
+    <div class="step"><b>2</b><span>ตอบแล้วเห็นเฉลยพร้อมคำอธิบายภาษาไทยทันที</span></div>
+    <div class="step"><b>3</b><span>ได้ ${PASS_PERCENT}% ขึ้นไปถือว่าผ่าน ทำใหม่ได้ไม่จำกัด เก็บคะแนนที่ดีที่สุด</span></div></div>
   </div>`;
+  const pv=$('#pv');
+  app.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{
+    $('#gr').value=b.dataset.g;
+    app.querySelectorAll('.seg button').forEach(x=>{const on=x===b;x.setAttribute('aria-pressed',on);x.setAttribute('aria-checked',on)});
+    pv.innerHTML=(TOPICS[b.dataset.g]||[]).map(t=>`<span class="chip">${esc(t.name)}</span>`).join('');
+  }));
   $('#reg').addEventListener('submit',onRegister);
 }
 
@@ -338,7 +459,7 @@ async function onRegister(e){
   const err=$('#regErr');
   if(!normName(first)) return err.textContent='กรอกชื่อ';
   if(!last) return err.textContent='กรอกนามสกุล';
-  if(!grade) return err.textContent='เลือกชั้น';
+  if(!TOPICS[grade]) return err.textContent='เลือกชั้น';
   if(!room) return err.textContent='เลือกห้อง';
   if(!/^\d+$/.test(noRaw)||no<1||no>MAX_NO) return err.textContent='เลขที่ต้องเป็นตัวเลข 1–'+MAX_NO;
   const user={first,last,grade,room:String(room),no:String(no),key:'M'+grade+'/'+room+'#'+no};
@@ -375,18 +496,23 @@ function renderHub(){
   const u=S.user, list=TOPICS[u.grade]||[];
   const passCount=list.filter(t=>isPass(T(t.id).best,BANK[t.id].length)).length;
   const allPass=passCount===list.length&&list.length>0;
-  app.innerHTML=`${markHTML(allPass,passCount,list.length)}
-  <div class="who"><div><b>${esc(u.first)} ${esc(u.last)}</b><br>ม.${esc(u.grade)}/${esc(u.room)} เลขที่ ${esc(u.no)}</div>
-    <div style="text-align:right"><b>ผ่านแล้ว ${passCount} จาก ${list.length} ด่าน</b><br><span class="sync${S.pending?' bad':''}" id="sync">${GAS_URL?(S.pending?'มีคะแนนที่ยังไม่ได้ส่ง':esc(syncState||'เชื่อมต่อระบบของครูแล้ว')):'โหมดออฟไลน์ คะแนนอยู่ในเครื่องนี้'}</span></div></div>
-  ${allPass?'<div class="note" style="margin-bottom:14px;border-color:var(--pass);background:var(--pass-soft)">ผ่านครบทุกด่านแล้ว แจ้งครูได้เลย หรือจะทำซ้ำเพื่อทบทวนก็ได้</div>':''}
+  const maxAll=list.reduce((s,t)=>s+BANK[t.id].length,0), bestAll=list.reduce((s,t)=>s+(T(t.id).best||0),0);
+  const rounds=list.reduce((s,t)=>s+(T(t.id).attempts||0),0);
+  app.innerHTML=`${markHTML(allPass,passCount,list.length,u)}
+  <div class="tiles">
+    <div class="tile${allPass?' good':''}"><small>ผ่านแล้ว</small><b>${passCount}<span> จาก ${list.length} ด่าน</span></b></div>
+    <div class="tile gold"><small>คะแนนรวม</small><b>${bestAll}<span> / ${maxAll}</span></b></div>
+    <div class="tile"><small>ทำไปแล้ว</small><b>${rounds}<span> รอบ</span></b></div>
+  </div>
+  ${allPass?'<div class="banner"><span class="bi">🏆</span><span>ผ่านครบทุกด่านแล้ว แจ้งครูได้เลย หรือจะทำซ้ำเพื่อทบทวนก็ได้</span></div>':''}
   <div class="ledger">${list.map(topicRow).join('')}</div>`;
   app.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>startTopic(b.dataset.go,b.dataset.mode==='new')));
   if(S.pending) sync();
 }
 function topicRow(t){
-  const st=T(t.id), total=BANK[t.id].length, run=st.run;
+  const st=T(t.id), total=BANK[t.id].length, run=st.run, idx=topicIndex(t.id);
   const inProgress=run&&!run.done&&run.answers.length>0;
-  const ticks=Array.from({length:total},(_,i)=>{const a=run&&run.answers[i];return `<i class="${a?(a.ok?'y':'n'):''}"></i>`}).join('');
+  const ticks=Array.from({length:total},(_,i)=>{const a=inProgress&&run.answers[i];return `<i class="${a?(a.ok?'y':'n'):''}"></i>`}).join('');
   const passed=isPass(st.best,total);
   const pill=st.attempts?(passed?'<span class="pill ok">ผ่าน</span>':'<span class="pill no">ยังไม่ผ่าน</span>'):(inProgress?'<span class="pill wait">กำลังทำ</span>':'<span class="pill wait">ยังไม่ได้ทำ</span>');
   let btn;
@@ -398,8 +524,11 @@ function topicRow(t){
   if(st.attempts) stats.push(`<span>ดีที่สุด ${st.best}/${total}</span><span>ทำไป ${st.attempts} รอบ</span>`);
   if(!stats.length) stats.push(`<span>${total} ข้อ ง่าย กลาง ยากคละกัน</span>`);
   const bp=Math.round((st.best||0)*100/total);
-  return `<section class="topic${passed?' passed':''}"><div class="t-head"><div class="tring" style="--p:${st.attempts?bp:0};--c:${passed?'var(--pass)':'var(--pen)'}"><span>${st.attempts?bp+'%':'–'}</span></div><div class="tt"><h3>${esc(t.name)}</h3><p>${esc(t.th)}</p></div>${pill}</div>
-    <div class="ticks" aria-hidden="true">${ticks}</div>
+  return `<section class="topic${passed?' passed':''}" style="${hueVars(t.id)}">
+    <div class="t-top"><div class="badge" aria-hidden="true"><small>ด่าน ${idx+1}</small><b>${esc(TAGS[t.id]||'')}</b></div><div class="tt"><h3>${esc(t.name.replace(/^T-GAT1 · /,''))}</h3><p>${esc(t.th)}</p></div>${pill}</div>
+    <div class="meter" role="img" aria-label="คะแนนดีที่สุด ${bp}% เกณฑ์ผ่าน ${PASS_PERCENT}%"><i style="width:${st.attempts?bp:0}%"></i><span class="pl" style="left:${PASS_PERCENT}%"></span></div>
+    <div class="meter-legend"><span>ดีที่สุด ${st.attempts?bp+'%':'—'}</span><span>เกณฑ์ผ่าน ${PASS_PERCENT}%</span></div>
+    ${inProgress?`<div class="ticks" aria-hidden="true">${ticks}</div>`:'<div style="height:12px"></div>'}
     <div class="t-foot"><div class="stats">${stats.join('')}</div>${btn}</div></section>`;
 }
 
@@ -429,17 +558,23 @@ function renderQuestion(id){
   if(pos>=total) return finishTopic(id);
   const {item,opts,sortable}=questionOf(id,run,pos);
   const ticks=Array.from({length:total},(_,i)=>{const a=run.answers[i];return `<i class="${a?(a.ok?'y':'n'):''}"></i>`}).join('');
-  app.innerHTML=`<div class="qbar"><button class="btn small ghost" id="back">กลับหน้าหลัก</button><span class="count">ข้อ ${pos+1} / ${total}</span><span class="right">${streakOf(run)>=3?`<span class="streak">🔥 ${streakOf(run)}</span>`:''}<span>ถูก <b>${run.correct}</b></span></span></div>
+  const sk=streakOf(run);
+  app.innerHTML=`<div class="qtop" style="${hueVars(id)}"><button class="btn small ghost" id="back">กลับหน้าหลัก</button>
+    <div class="qmeta"><span class="tname">${esc(topic.name)}</span><span class="count">ข้อ ${pos+1} / ${total}</span></div>
+    <span class="qright">${sk>=3?`<span class="streak">🔥 ${sk}</span>`:''}<span>ถูก <b>${run.correct}</b></span></span>
+    <div class="prog" aria-hidden="true"><i style="width:${pos*100/total}%"></i></div></div>
   <div class="ticks" aria-hidden="true">${ticks}</div>
-  <div class="sheet qcard">
-    <div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><span class="lvl l${item.l}">${LVL[item.l]}</span><span class="muted" style="font-size:14px">${esc(topic.name)}</span></div>
+  <div class="sheet qcard" style="${hueVars(id)}">
+    <div class="qhead"><span class="lvl l${item.l}">${LVL[item.l]}</span><span class="kbd">กด <kbd>1</kbd>–<kbd>4</kbd> หรือ <kbd>A</kbd>–<kbd>D</kbd> เพื่อตอบ</span></div>
     ${passageHTML(item)}<p class="q">${fmtQ(item.q)}</p>
-    <div class="opts" id="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${sortable?'':`<span class="k">${LETTERS[i]}</span>`}<span>${esc(o)}</span></button>`).join('')}</div>
-    <div id="fbBox"></div>
+    <div class="opts" id="opts">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${sortable?'':`<span class="k">${LETTERS[i]}</span>`}<span class="ot">${esc(o)}</span></button>`).join('')}</div>
+    <div id="fbBox" aria-live="polite"></div>
   </div>`;
   $('#back').addEventListener('click',()=>{sync();renderHub()});
+  const pz=$('.qcard .passage'), on=pz&&pz.querySelector('.blank.on');
+  if(on) pz.scrollTop=Math.max(0,on.offsetTop-pz.clientHeight/3);
   let answered=false;
-  app.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+  const choose=b=>{
     if(answered) return; answered=true;
     const chosen=opts[+b.dataset.i], ok=chosen===item.a;
     run.answers.push({i:run.order[pos],c:chosen,ok}); if(ok) run.correct++;
@@ -447,13 +582,24 @@ function renderQuestion(id){
     app.querySelectorAll('.opt').forEach(x=>{x.disabled=true;const v=opts[+x.dataset.i];if(v===item.a)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
     beep(ok);
     const expl=item.n||topic.rule;
-    $('#fbBox').innerHTML=`<div class="fb${ok?' good':''}"><b class="${ok?'good-t':'bad-t'}">${ok?'ถูกต้อง':'ยังไม่ถูก คำตอบคือ '+esc(item.a)}</b>${esc(expl)}</div>
-      <div class="nextbar"><button class="btn" id="next">${pos+1>=total?'ดูผลคะแนน':'ข้อต่อไป'}</button></div>`;
+    $('#fbBox').innerHTML=`<div class="fb${ok?' good':''}"><span class="fbicon" aria-hidden="true">${ok?'✓':'✕'}</span><div><b class="${ok?'good-t':'bad-t'}">${ok?'ถูกต้อง':'ยังไม่ถูก คำตอบคือ '+esc(item.a)}</b><p>${esc(expl)}</p></div></div>
+      <div class="nextbar"><span class="kbd">กด <kbd>Enter</kbd></span><button class="btn" id="next">${pos+1>=total?'ดูผลคะแนน':'ข้อต่อไป'}</button></div>`;
     const nx=$('#next'); nx.focus({preventScroll:true});
     nx.scrollIntoView({block:'nearest',behavior:'smooth'});
     nx.addEventListener('click',()=>renderQuestion(id));
     if(run.answers.length%5===0&&run.answers.length<total) sync();
-  }));
+  };
+  app.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>choose(b)));
+  keyHandler=e=>{
+    const tg=e.target; if(tg&&/^(INPUT|SELECT|TEXTAREA)$/.test(tg.tagName)) return;
+    if(!answered){
+      const k=e.key.toLowerCase(), i='1234'.indexOf(k)>=0?'1234'.indexOf(k):'abcd'.indexOf(k);
+      if(i>=0&&i<opts.length){e.preventDefault();choose(app.querySelector(`.opt[data-i="${i}"]`))}
+    }else if(e.key==='Enter'||e.key===' '){
+      if(document.activeElement&&document.activeElement.tagName==='BUTTON') return; // ปุ่มที่โฟกัสอยู่จะกดเอง
+      e.preventDefault(); const nx=$('#next'); if(nx) nx.click();
+    }
+  };
   window.scrollTo(0,0);
 }
 
@@ -462,9 +608,16 @@ function confetti(){
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const c=document.createElement('canvas');c.id='confetti';document.body.appendChild(c);
   let x=null;try{x=c.getContext('2d')}catch(e){}if(!x){c.remove();return}
-  const W=c.width=innerWidth,H=c.height=innerHeight,cols=['#2EE59D','#FFC940','#7C6CFF','#FF4D63','#4D8BFF','#fff'];
-  const P=Array.from({length:160},()=>({x:W/2,y:H*.35,vx:(Math.random()-.5)*16,vy:Math.random()*-14-4,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)]}));
+  const W=c.width=innerWidth,H=c.height=innerHeight,cols=['#2EE6A0','#FFC94A','#7C6CFF','#FF4D6A','#4D8DFF','#fff'];
+  const P=Array.from({length:170},()=>({x:W/2,y:H*.35,vx:(Math.random()-.5)*16,vy:Math.random()*-14-4,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)]}));
   let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.remove()})();
+}
+function tierOf(pct,passed){
+  if(pct>=90) return '🏆 ยอดเยี่ยม';
+  if(pct>=75) return '🌟 เก่งมาก';
+  if(passed) return '✅ ผ่านเกณฑ์';
+  if(pct>=40) return '💪 อีกนิดเดียว';
+  return '📘 ทบทวนแล้วลองใหม่';
 }
 function finishTopic(id){
   inQuiz=false; setFoot(true);
@@ -475,13 +628,20 @@ function finishTopic(id){
   }
   const pct=Math.round(run.correct*100/total), passed=isPass(run.correct,total);
   const wrong=run.answers.filter(a=>!a.ok);
-  app.innerHTML=`<div class="sheet">
-    <div class="resultTop"><div class="scorering" style="--p:${pct};--c:${passed?'var(--pass)':'var(--pen)'}"><div><div class="score">${run.correct}<small>/${total}</small></div><span class="muted" style="font-size:14px">${pct}%</span></div></div>
+  const lv={1:[0,0],2:[0,0],3:[0,0]};
+  run.answers.forEach(a=>{const it=BANK[id][a.i];if(it&&lv[it.l]){lv[it.l][1]++;if(a.ok)lv[it.l][0]++}});
+  const c=passed?'#2EE6A0':'#FF4D6A';
+  app.innerHTML=`<div class="sheet result" style="${hueVars(id)};--c:${c}">
+    <div class="resultTop"><div class="scorering" style="--p:${pct}"><div><div class="score">${run.correct}<small>/${total}</small></div><span class="muted" style="font-size:14px">${pct}%</span></div></div>
     <div><p class="muted" style="margin:0">${esc(topic.name)} รอบที่ ${run.attempt}</p>
-    <h2 style="font-size:28px;margin:4px 0 6px;color:${passed?'var(--pass)':'#FF8A9A'}">${passed?'ผ่านเกณฑ์ '+PASS_PERCENT+'% แล้ว':'ยังไม่ถึงเกณฑ์ '+PASS_PERCENT+'%'}</h2>
+    <span class="tier">${tierOf(pct,passed)}</span>
+    <h2 style="font-size:28px;margin:2px 0 6px;color:${passed?'var(--pass)':'#FF9AAE'}">${passed?'ผ่านเกณฑ์ '+PASS_PERCENT+'% แล้ว':'ยังไม่ถึงเกณฑ์ '+PASS_PERCENT+'%'}</h2>
     <p class="muted" style="margin:0;font-size:15px">${passed?'':'ทำใหม่ได้ไม่จำกัด ระบบเก็บคะแนนที่ดีที่สุดไว้ '}คะแนนดีที่สุดของด่านนี้ ${st.best}/${total}</p></div></div>
+    <div class="tiles"><div class="tile good"><small>ตอบถูก</small><b>${run.correct}</b></div><div class="tile bad"><small>ตอบผิด</small><b>${wrong.length}</b></div>
+      <div class="tile"><small>ความแม่นยำ</small><b>${pct}<span>%</span></b></div><div class="tile gold"><small>ดีที่สุด</small><b>${st.best}<span> / ${total}</span></b></div></div>
+    <div class="lvlbars">${[1,2,3].map(l=>{const [r,n]=lv[l];return n?`<div class="lb l${l}"><span>${LVL[l]}</span><span class="bar"><i style="width:${Math.round(r*100/n)}%"></i></span><span>${r}/${n}</span></div>`:''}).join('')}</div>
     <div class="actions"><button class="btn${passed?' ghost':' pen'}" id="again">ทำด่านนี้ใหม่</button><button class="btn${passed?'':' ghost'}" id="home">กลับหน้าหลัก</button></div>
-    ${wrong.length?`<h3 style="margin-top:22px;font-size:18px">ข้อที่ตอบผิด ${wrong.length} ข้อ</h3><div class="review">${wrong.map(a=>{const it=BANK[id][a.i];return `<div class="rv">${it.p?`<details><summary>ดูบทความ / บทสนทนา</summary>${passageHTML(it)}</details>`:''}<div class="qtext">${fmtQ(it.q)}</div><div>ตอบ <span class="yours">${esc(a.c)}</span> คำตอบที่ถูก <span class="ans">${esc(it.a)}</span></div>${it.n?`<div class="muted">${esc(it.n)}</div>`:''}</div>`}).join('')}</div>`:'<p style="margin-top:18px">ไม่มีข้อผิดเลย</p>'}
+    ${wrong.length?`<h3 class="sec-h">ข้อที่ตอบผิด ${wrong.length} ข้อ</h3><div class="review">${wrong.map(a=>{const it=BANK[id][a.i];return `<div class="rv">${it.p?`<details><summary>ดูบทความ / บทสนทนา</summary>${passageHTML(it)}</details>`:''}<div class="qtext">${fmtQ(it.q)}</div><div class="rvl"><span class="rk">เราตอบ</span><span class="yours">${esc(a.c)}</span></div><div class="rvl"><span class="rk">ที่ถูก</span><span class="ans">${esc(it.a)}</span></div>${it.n?`<div class="rvn">💡 ${esc(it.n)}</div>`:''}</div>`}).join('')}</div>`:'<p style="margin-top:20px">ไม่มีข้อผิดเลย 🎉</p>'}
   </div>`;
   if(passed&&!run.celebrated){run.celebrated=true;persist();confetti()}
   $('#again').addEventListener('click',()=>startTopic(id,true));
@@ -491,7 +651,7 @@ function finishTopic(id){
 
 function showLocked(kind){
   inQuiz=false; setFoot(true);
-  app.innerHTML=`${markHTML(false)}<div class="sheet lock"><h2>เข้าใช้งานจากเครื่องนี้ไม่ได้</h2>
+  app.innerHTML=`${markHTML(false)}<div class="sheet lock"><h2>🔒 เข้าใช้งานจากเครื่องนี้ไม่ได้</h2>
   <p>${kind==='not_registered'?'ไม่พบชื่อนี้ในระบบของครู (ครูอาจลบรายชื่อออก) ให้แจ้งครูก่อนลงทะเบียนใหม่':'ชื่อนี้ถูกผูกกับเครื่องอื่นแล้ว หนึ่งคนใช้ได้หนึ่งเครื่องเท่านั้น ถ้าเครื่องนี้เป็นของเราจริง ให้แจ้งครูเพื่อปลดล็อก แล้วกดลองอีกครั้ง'}</p>
   <div class="actions"><button class="btn" id="retry">ลองอีกครั้ง</button>${kind==='not_registered'?'<button class="btn ghost" id="reReg">ลงทะเบียนใหม่</button>':''}</div></div>`;
   $('#retry').addEventListener('click',boot);
@@ -504,7 +664,7 @@ const PIN_SS='fix0r_admin_pin';
 function studentURL(){return location.pathname}
 function renderAdminLogin(msg){
   document.body.classList.add('adm'); setFoot(false);
-  app.innerHTML=`${markHTML(false)}<div class="sheet" style="max-width:420px"><h2 style="font-size:24px;margin-bottom:2px">🔐 Admin ครูโอ๊ต</h2><p class="muted" style="margin:0 0 14px;font-size:15px">ดูคะแนน ปลดล็อกเครื่อง และจัดการรายชื่อนักเรียน</p>
+  app.innerHTML=`${markHTML(false)}<div class="sheet gborder" style="max-width:440px"><h2 style="font-size:24px;margin-bottom:2px">🔐 Admin ครูโอ๊ต</h2><p class="muted" style="margin:0 0 14px;font-size:15px">ดูคะแนน ปลดล็อกเครื่อง และจัดการรายชื่อนักเรียน</p>
   <form id="pinF" class="form"><div><label for="pin">รหัส PIN</label><input id="pin" type="password" inputmode="numeric" autocomplete="off"></div>
   <div class="err">${esc(msg||'')}</div><button class="btn" id="pinBtn">เข้าสู่ Admin</button><a class="muted" href="${esc(studentURL())}" style="text-align:center;font-size:14px">กลับหน้านักเรียน</a></form></div>`;
   $('#pinF').addEventListener('submit',async e=>{
