@@ -280,9 +280,197 @@ td.c{text-align:center}
 }
 @media (hover:none){.kbd{display:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.grade path{stroke-dashoffset:0}.stamp{transform:rotate(-14deg) scale(1)}.mark::after{display:none}}
+
+/* ================= v4 · grand layer ================= */
+@property --p{syntax:'<number>';inherits:true;initial-value:0}
+body{background:transparent}               /* fix: body bg was hiding the aurora layer */
+body::after{display:none}                  /* dot grid replaced by the star canvas */
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+.sheet{backdrop-filter:none;-webkit-backdrop-filter:none;background:linear-gradient(165deg,rgba(38,45,108,.74),rgba(14,19,56,.84))}
+
+/* ---------- opening animation ---------- */
+.intro{position:fixed;inset:0;z-index:100;display:none;place-items:center;overflow:hidden;cursor:pointer;
+  background:radial-gradient(60% 50% at 50% 45%,#1B2160 0%,#080B26 70%)}
+.intro.play{display:grid}
+.intro.out{animation:introOut .45s ease-in forwards}
+@keyframes introOut{to{opacity:0;transform:scale(1.06)}}
+.intro-core{position:relative;display:grid;justify-items:center;gap:6px}
+.intro-mark{position:relative;font-weight:900;font-size:min(34vw,220px);line-height:1;letter-spacing:-.06em;
+  background:linear-gradient(180deg,#FFB0BC,var(--pen) 70%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 18px 50px rgba(255,77,106,.7));animation:imIn .55s cubic-bezier(.2,1.4,.4,1) both,imDim .4s 1.15s ease forwards}
+@keyframes imIn{from{transform:scale(.4);opacity:0}}
+@keyframes imDim{to{opacity:.35;transform:scale(.92)}}
+.intro-mark svg{position:absolute;left:-4%;top:-6%;width:108%;height:112%;overflow:visible}
+.intro-mark path{fill:none;stroke:#fff;stroke-width:7;stroke-linecap:round;stroke-dasharray:160;stroke-dashoffset:160;
+  filter:drop-shadow(0 0 10px #fff);animation:strike .4s .62s cubic-bezier(.7,0,.3,1) forwards}
+.intro-stamp{position:absolute;top:50%;left:50%;font-weight:900;font-size:min(16vw,104px);line-height:1;padding:.08em .32em;border-radius:.16em;
+  color:var(--pass);border:.07em solid var(--pass);background:rgba(8,11,38,.82);box-shadow:0 0 60px rgba(46,230,160,.7),inset 0 0 30px rgba(46,230,160,.25);
+  transform:translate(-50%,-62%) rotate(-12deg) scale(3);opacity:0;animation:slam .38s 1.2s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes slam{to{transform:translate(-50%,-62%) rotate(-12deg) scale(1);opacity:1}}
+.intro-title{font-size:min(7vw,34px);font-weight:900;letter-spacing:.02em;color:#fff;opacity:0;transform:translateY(12px);animation:titleIn .5s 1.55s ease forwards}
+@keyframes titleIn{to{opacity:1;transform:none}}
+.intro-rays{position:absolute;left:50%;top:50%;width:170vmax;height:170vmax;margin:-85vmax 0 0 -85vmax;opacity:0;pointer-events:none;
+  background:repeating-conic-gradient(rgba(46,230,160,.16) 0 6deg,transparent 6deg 18deg);
+  -webkit-mask:radial-gradient(circle,#000 0,transparent 60%);mask:radial-gradient(circle,#000 0,transparent 60%);
+  animation:raysIn .6s 1.25s ease forwards,spin 30s 1.25s linear infinite}
+@keyframes raysIn{to{opacity:1}}
+.intro-flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:iflash .5s 1.22s ease-out}
+@keyframes iflash{0%{opacity:.55}100%{opacity:0}}
+.intro-skip{position:absolute;bottom:calc(24px + env(safe-area-inset-bottom,0));left:50%;transform:translateX(-50%);font-size:13px;color:var(--muted);opacity:0;animation:titleIn .4s .8s forwards}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- hero upgrades ---------- */
+.mark{isolation:isolate}
+.gwrap{position:relative;display:grid;place-items:center}
+.halo{position:absolute;z-index:-1;left:50%;top:50%;width:270px;height:270px;margin:-135px 0 0 -135px;border-radius:50%;pointer-events:none;opacity:.6;
+  background:conic-gradient(var(--pen),var(--gold),var(--pass),#22C3FF,var(--violet),var(--pen));
+  -webkit-mask:radial-gradient(circle,transparent 36%,#000 39%,#000 44%,transparent 64%);mask:radial-gradient(circle,transparent 36%,#000 39%,#000 44%,transparent 64%);
+  animation:spin 16s linear infinite}
+.mark h1{background:linear-gradient(90deg,#fff 0%,#D3D7FF 30%,#FFE7A6 50%,#D3D7FF 70%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 7s linear infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.chip.rank{color:#1E1400;background:linear-gradient(135deg,#FFE7A6,var(--gold));border-color:transparent;box-shadow:0 6px 18px -8px var(--gold)}
+.bigring{position:relative;background:conic-gradient(var(--pass),#22C3FF calc(var(--p)*1%),rgba(255,255,255,.1) 0);animation:fillp 1.5s .35s cubic-bezier(.2,.8,.2,1) both}
+.bigring::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;transform:rotate(calc(var(--p)*3.6deg));
+  background:radial-gradient(circle at 50% 6.5px,#fff 0 4px,transparent 5px);filter:drop-shadow(0 0 6px #fff)}
+@keyframes fillp{from{--p:0}}
+
+/* ---------- stat tiles with icons ---------- */
+.tile{display:flex;align-items:center;gap:12px;background:linear-gradient(160deg,rgba(255,255,255,.08),rgba(255,255,255,.02));transition:transform .2s,border-color .2s}
+.tile:hover{transform:translateY(-2px);border-color:var(--line2)}
+.ti{flex:none;width:44px;height:44px;border-radius:14px;display:grid;place-items:center;font-size:21px;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:1px solid var(--line);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.tile b span.num{font-size:inherit;color:inherit;font-weight:inherit;display:inline}
+
+/* ---------- champion banner ---------- */
+.banner{position:relative;overflow:hidden;padding:18px 20px;border:0;background:linear-gradient(120deg,rgba(255,201,74,.22),rgba(46,230,160,.16),rgba(124,108,255,.18))}
+.banner::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;background:linear-gradient(90deg,var(--gold),var(--pass),var(--gold));background-size:200% 100%;animation:pan 4s linear infinite;
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
+.banner .bi{font-size:40px;filter:drop-shadow(0 0 14px rgba(255,201,74,.8));animation:bob 2.4s ease-in-out infinite}
+.banner strong{display:block;font-size:20px;color:var(--gold)}
+@keyframes bob{50%{transform:translateY(-4px) rotate(-4deg)}}
+
+/* ---------- level map ---------- */
+.ledger.journey{position:relative;display:grid;grid-template-columns:1fr;gap:22px}
+.journey .track{position:absolute;left:50%;top:44px;bottom:44px;width:4px;margin-left:-2px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden}
+.journey .track i{position:absolute;left:0;right:0;top:0;height:calc(var(--jp)*1%);border-radius:inherit;background:linear-gradient(var(--pass),#22C3FF);box-shadow:0 0 14px var(--pass);animation:growH 1.3s .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes growH{from{height:0}}
+.stage{position:relative;display:grid;grid-template-columns:1fr 96px 1fr;align-items:center}
+.stage .topic{grid-row:1;grid-column:1}
+.stage.r .topic{grid-column:3}
+.stage .node{grid-row:1;grid-column:2;justify-self:center}
+.node{position:relative;z-index:1;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:24px;font-weight:900;color:#fff;
+  background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.5),transparent 46%),linear-gradient(145deg,var(--h),var(--h2));
+  box-shadow:0 0 0 6px rgba(8,11,38,.92),0 0 0 7px var(--line2),0 14px 30px -8px var(--h)}
+.node::before{content:"";position:absolute;top:50%;right:100%;width:18px;height:2px;margin-right:7px;background:linear-gradient(90deg,transparent,var(--h))}
+.stage.r .node::before{right:auto;left:100%;margin:0 0 0 7px;background:linear-gradient(90deg,var(--h),transparent)}
+.node.done{background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.55),transparent 46%),linear-gradient(145deg,var(--pass),#22C3FF);
+  box-shadow:0 0 0 6px rgba(8,11,38,.92),0 0 0 7px rgba(46,230,160,.65),0 0 32px rgba(46,230,160,.65)}
+.node.next::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid var(--h);animation:pulseRing 1.8s ease-out infinite}
+.node.going::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px dashed var(--gold);animation:spin 7s linear infinite}
+@keyframes pulseRing{from{transform:scale(.85);opacity:.95}to{transform:scale(1.4);opacity:0}}
+.mapstrip{display:none}
+/* card spotlight + tilt */
+.topic{--mx:0px;--my:0px;--rx:0deg;--ry:0deg;transform:perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .25s,border-color .2s,box-shadow .2s}
+.topic::after{background:radial-gradient(380px 160px at var(--mx) var(--my),color-mix(in srgb,var(--h) 22%,transparent),transparent)}
+.topic:hover{transform:perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) translateY(-4px)}
+.topic.tilting{transition:border-color .2s,box-shadow .2s}
+.meter i{animation:growW 1.1s .3s cubic-bezier(.2,.8,.2,1) both}
+@keyframes growW{from{width:0}}
+
+/* ---------- quiz effects ---------- */
+.prog{overflow:visible}
+.prog i::after{content:"";position:absolute;right:-6px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 22px var(--h,var(--violet))}
+.streak.s5{background:linear-gradient(135deg,rgba(255,138,92,.3),rgba(255,201,74,.25));box-shadow:0 0 16px rgba(255,160,60,.55)}
+.streak.s10{color:#fff;background:linear-gradient(135deg,var(--pen),var(--gold));border-color:transparent;box-shadow:0 0 22px rgba(255,120,60,.85);animation:pop .35s,flicker 1.2s ease-in-out infinite}
+@keyframes flicker{50%{box-shadow:0 0 30px rgba(255,170,60,1)}}
+.burst{position:fixed;z-index:60;width:0;height:0;pointer-events:none}
+.burst i{position:absolute;left:-4px;top:-4px;width:8px;height:8px;border-radius:2px;background:var(--c);box-shadow:0 0 8px var(--c);animation:fly .8s cubic-bezier(.12,.7,.3,1) forwards}
+.burst i.dot{border-radius:50%}
+@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(var(--r)) scale(.4);opacity:0}}
+.plus{position:fixed;z-index:61;pointer-events:none;font-weight:900;font-size:28px;color:var(--pass);text-shadow:0 0 16px rgba(46,230,160,.9);transform:translate(-50%,0);animation:plusUp .95s ease-out forwards}
+@keyframes plusUp{0%{opacity:0;transform:translate(-50%,8px) scale(.6)}25%{opacity:1;transform:translate(-50%,-12px) scale(1.15)}100%{opacity:0;transform:translate(-50%,-64px) scale(1)}}
+#flash{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:0}
+#flash.g{animation:flashG .65s ease-out}
+#flash.r{animation:flashR .65s ease-out}
+@keyframes flashG{0%{opacity:1;box-shadow:inset 0 0 140px rgba(46,230,160,.6)}100%{opacity:0;box-shadow:inset 0 0 140px rgba(46,230,160,0)}}
+@keyframes flashR{0%{opacity:1;box-shadow:inset 0 0 140px rgba(255,77,106,.55)}100%{opacity:0;box-shadow:inset 0 0 140px rgba(255,77,106,0)}}
+.combo{position:fixed;left:50%;top:90px;z-index:62;pointer-events:none;font-weight:900;font-size:24px;padding:10px 22px;border-radius:999px;white-space:nowrap;color:#fff;
+  background:linear-gradient(135deg,var(--pen),#FF8A3D,var(--gold));box-shadow:0 18px 44px -12px rgba(255,120,60,.95);transform:translateX(-50%);animation:comboIn 1.7s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes comboIn{0%{opacity:0;transform:translateX(-50%) scale(.4)}15%{opacity:1;transform:translateX(-50%) scale(1.08)}25%{transform:translateX(-50%) scale(1)}80%{opacity:1}100%{opacity:0;transform:translateX(-50%) translateY(-20px)}}
+
+/* ---------- result ceremony ---------- */
+.ceremony{position:relative;display:grid;justify-items:center;text-align:center;padding:6px 0 4px}
+.stagec{position:relative;width:230px;height:230px;display:grid;place-items:center}
+.rays{position:absolute;left:50%;top:50%;width:440px;height:440px;margin:-220px 0 0 -220px;pointer-events:none;
+  background:repeating-conic-gradient(color-mix(in srgb,var(--c) 30%,transparent) 0 7deg,transparent 7deg 20deg);
+  -webkit-mask:radial-gradient(circle,#000 18%,transparent 62%);mask:radial-gradient(circle,#000 18%,transparent 62%);animation:spin 26s linear infinite;opacity:.9}
+.ceremony .scorering{width:196px;height:196px;animation:fillp 1.3s .2s cubic-bezier(.2,.8,.2,1) both,ringPop .6s cubic-bezier(.2,1.5,.4,1) both}
+.ceremony .scorering>div{width:162px;height:162px}
+@keyframes ringPop{from{transform:scale(.6);opacity:0}}
+.ceremony .score{font-size:60px}
+.medal{position:absolute;right:-6px;bottom:2px;width:84px;height:104px;filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));animation:medalIn .6s 1.2s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes medalIn{from{transform:scale(0) rotate(-40deg);opacity:0}}
+.medal .shine{animation:medalShine 2.8s 1.8s ease-in-out infinite}
+@keyframes medalShine{0%,60%{transform:translateX(-60px)}100%{transform:translateX(60px)}}
+.ceremony .tier{font-size:17px;padding:6px 18px;margin:14px 0 6px}
+.ceremony h2{font-size:30px}
+.ceremony .rmeta{margin:0;color:var(--muted);font-size:15px}
+.result .tiles{margin-top:24px}
+.result .tile{flex-direction:column;align-items:flex-start;gap:2px}
+
+/* ---------- register ---------- */
+.step b{box-shadow:0 8px 18px -8px var(--violet)}
+.seg button[aria-pressed="true"]{animation:pop .3s}
+
+/* ---------- responsive ---------- */
+@media (max-width:999px){
+  .journey .track{left:31px;margin-left:-2px}
+  .stage,.stage.r{grid-template-columns:62px 1fr;column-gap:14px}
+  .stage .node{grid-column:1;width:54px;height:54px;font-size:21px}
+  .stage .topic,.stage.r .topic{grid-column:2}
+  .node::before,.stage.r .node::before{right:auto;left:100%;width:14px;margin:0 0 0 7px;background:linear-gradient(90deg,var(--h),transparent)}
+}
+@media (max-width:640px){
+  .journey .track,.stage .node{display:none}
+  .stage,.stage.r{grid-template-columns:1fr}
+  .stage .topic,.stage.r .topic{grid-column:1}
+  .mapstrip{position:relative;display:flex;justify-content:space-between;align-items:center;margin:0 6px 18px;padding:0 2px}
+  .ms-line{position:absolute;left:20px;right:20px;top:50%;height:4px;margin-top:-2px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+  .ms-line i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--pass),#22C3FF);box-shadow:0 0 10px var(--pass);animation:growW 1.2s .4s both}
+  .ms-node{position:relative;width:40px;height:40px;border-radius:50%;border:0;display:grid;place-items:center;font-weight:900;font-size:16px;color:#fff;
+    background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.5),transparent 46%),linear-gradient(145deg,var(--h),var(--h2));box-shadow:0 0 0 4px rgba(8,11,38,.95),0 8px 18px -6px var(--h)}
+  .ms-node.done{background:linear-gradient(145deg,var(--pass),#22C3FF);box-shadow:0 0 0 4px rgba(8,11,38,.95),0 0 18px rgba(46,230,160,.7)}
+  .ms-node.next::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px solid var(--h);animation:pulseRing 1.8s ease-out infinite}
+  .halo{width:190px;height:190px;margin:-95px 0 0 -95px}
+  .gwrap{justify-self:start}
+  .bigring::after{display:none}
+  .tile{flex-direction:column;align-items:flex-start;gap:6px}
+  .ti{width:32px;height:32px;font-size:16px;border-radius:10px}
+  .stagec{width:200px;height:200px}
+  .ceremony .scorering{width:170px;height:170px}.ceremony .scorering>div{width:140px;height:140px}.ceremony .score{font-size:48px}
+  .rays{width:340px;height:340px;margin:-170px 0 0 -170px}
+  .medal{width:70px;height:88px;right:-4px}
+  .combo{font-size:19px;top:76px}
+}
+@media (prefers-reduced-motion:reduce){.topic{transform:none!important}}
+
+
+/* perf: gradient borders are static (animating background-position repainted every frame and cost ~24 fps on slow Chromebooks) */
+.gborder::before,.banner::before{animation:none;background-size:100% 100%}
+/* v4 polish */
+.qtop{border:1px solid var(--line);border-top:0;border-radius:0 0 22px 22px;margin:-22px 0 12px;box-shadow:0 18px 40px -24px rgba(0,0,0,.9)}
+@media (max-width:640px){
+  .ms-node.going::after{content:"";position:absolute;inset:-7px;border-radius:50%;border:2px dashed var(--gold);animation:spin 7s linear infinite}
+  .result .tile b span{display:inline}
+  .qtop{margin:-22px -16px 12px;border-radius:0;border-left:0;border-right:0}
+}
 </style>
 </head>
 <body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div id="intro" class="intro" aria-hidden="true"><span class="intro-rays"></span><span class="intro-flash"></span>
+  <div class="intro-core"><div class="intro-mark">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg></div>
+  <div class="intro-stamp">ผ่าน</div><div class="intro-title">ระบบแก้ 0/ร</div></div><span class="intro-skip">แตะเพื่อข้าม</span></div>
 <div class="wrap" id="app"></div>
 <footer class="foot hidden" id="foot"><span>ระบบแก้ 0/ร &nbsp;By T.OAT</span><a class="adminlink" id="adminLink" href="?admin=1">🔐 Admin ครูโอ๊ต</a></footer>
 <div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
@@ -396,6 +584,102 @@ document.addEventListener('visibilitychange',()=>{
 });
 try{new MutationObserver(ms=>{if(!inQuiz||!S)return;if(ms.some(m=>m.type==='characterData')){S.violations=(S.violations||0)+1;persist();toast('ห้ามใช้โปรแกรมแปลภาษาระหว่างทำแบบฝึกหัด')}}).observe(document.body,{subtree:true,characterData:true})}catch(e){}
 
+/* =================== effects (v4) =================== */
+function reducedMotion(){try{return !!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)}catch(e){return false}}
+function tones(seq){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const now=AC.currentTime;seq.forEach(([f,t,d,v,type])=>{const o=AC.createOscillator(),g=AC.createGain();o.type=type||'triangle';o.frequency.value=f;g.gain.setValueAtTime(0.0001,now+t);g.gain.exponentialRampToValueAtTime(v||.16,now+t+.012);g.gain.exponentialRampToValueAtTime(0.0001,now+t+d);o.connect(g).connect(AC.destination);o.start(now+t);o.stop(now+t+d+.02)})}catch(e){}}
+function chime(){tones([[880,0,.14],[1175,.08,.14],[1568,.16,.3]])}
+function fanfare(){tones([[523,0,.2],[659,.13,.2],[784,.26,.2],[1047,.4,.6,.2]])}
+
+/* opening animation: once per browser session, never on admin, never with reduced motion */
+function playIntro(){
+  const el=document.getElementById('intro'); if(!el) return;
+  let seen=false; try{seen=sessionStorage.getItem('fix0r_intro')==='1'}catch(e){}
+  if(seen||reducedMotion()||/[?&]admin=1/.test(location.search)){el.remove();return}
+  try{sessionStorage.setItem('fix0r_intro','1')}catch(e){}
+  el.classList.add('play');
+  let closed=false;
+  const done=()=>{if(closed)return;closed=true;document.removeEventListener('keydown',done,true);el.classList.add('out');setTimeout(()=>el.remove(),460)};
+  el.addEventListener('click',done); document.addEventListener('keydown',done,true);
+  setTimeout(done,2700);
+}
+
+/* star sky: drifting, twinkling stars with faint links + an occasional shooting star (30 fps, pauses when hidden) */
+(function sky(){
+  const c=document.getElementById('sky'); if(!c) return;
+  let x=null; try{x=c.getContext('2d')}catch(e){} if(!x) return;
+  const still=reducedMotion(); let W=0,H=0,stars=[],shoot=null,last=0;
+  function init(){const dpr=Math.min(window.devicePixelRatio||1,1.5);W=innerWidth;H=innerHeight;c.width=Math.round(W*dpr);c.height=Math.round(H*dpr);x.setTransform(dpr,0,0,dpr,0,0);
+    const n=Math.max(18,Math.min(90,Math.round(W*H/15000)));
+    stars=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.14,vy:(Math.random()-.5)*.14,r:Math.random()*1.4+.4,t:Math.random()*6.28,s:.6+Math.random()*1.6}))}
+  function draw(dt,now){
+    x.clearRect(0,0,W,H);
+    for(let i=0;i<stars.length;i++){const a=stars[i];for(let j=i+1;j<stars.length;j++){const b=stars[j],dx=a.x-b.x,dy=a.y-b.y,d=dx*dx+dy*dy;
+      if(d<12100){x.strokeStyle='rgba(170,180,255,'+(0.13*(1-d/12100)).toFixed(3)+')';x.lineWidth=1;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}}
+    for(const s of stars){s.x+=s.vx*dt;s.y+=s.vy*dt;if(s.x<0)s.x+=W;else if(s.x>W)s.x-=W;if(s.y<0)s.y+=H;else if(s.y>H)s.y-=H;
+      x.fillStyle='rgba(255,255,255,'+(.4+.45*Math.sin(now/1000*s.s+s.t)).toFixed(3)+')';x.beginPath();x.arc(s.x,s.y,s.r,0,6.2832);x.fill()}
+    if(!still){
+      if(!shoot&&Math.random()<.0035*dt) shoot={x:Math.random()*W*.6,y:Math.random()*H*.35,l:0};
+      if(shoot){shoot.l+=dt*16;const hx=shoot.x+shoot.l*1.7,hy=shoot.y+shoot.l*.75,g=x.createLinearGradient(hx,hy,hx-130,hy-57);
+        g.addColorStop(0,'rgba(255,255,255,.95)');g.addColorStop(1,'rgba(255,255,255,0)');x.strokeStyle=g;x.lineWidth=2;x.beginPath();x.moveTo(hx,hy);x.lineTo(hx-130,hy-57);x.stroke();
+        if(shoot.l>90||hx>W+40) shoot=null}
+    }
+  }
+  function frame(now){requestAnimationFrame(frame);if(document.hidden||now-last<33)return;const dt=last?Math.min(3,(now-last)/16.7):1;last=now;draw(dt,now)}
+  init(); addEventListener('resize',()=>{init();if(still)draw(0,0)});
+  if(still) draw(0,0); else requestAnimationFrame(frame);
+})();
+
+/* particle burst from an element (answer feedback) */
+function burst(el,ok){
+  if(reducedMotion()||!el) return;
+  const r=el.getBoundingClientRect(), b=document.createElement('div');
+  b.className='burst'; b.style.left=(r.left+Math.min(60,r.width/2))+'px'; b.style.top=(r.top+r.height/2)+'px';
+  const cols=ok?['#2EE6A0','#7CF5C8','#FFC94A','#ffffff','#22C3FF']:['#FF4D6A','#FF8A5C'];
+  const n=ok?22:9;
+  for(let i=0;i<n;i++){const p=document.createElement('i'),a=Math.random()*6.283,d=(ok?60:30)+Math.random()*(ok?90:40);
+    p.style.setProperty('--x',Math.cos(a)*d+'px');p.style.setProperty('--y',Math.sin(a)*d+'px');p.style.setProperty('--r',(Math.random()*540-270)+'deg');p.style.setProperty('--c',cols[i%cols.length]);
+    if(i%3===0)p.className='dot';b.appendChild(p)}
+  document.body.appendChild(b); setTimeout(()=>b.remove(),900);
+  if(ok){const pl=document.createElement('div');pl.className='plus';pl.textContent='+1';pl.style.left=(r.left+r.width-40)+'px';pl.style.top=(r.top-6)+'px';document.body.appendChild(pl);setTimeout(()=>pl.remove(),1000)}
+}
+function flash(ok){
+  if(reducedMotion()) return;
+  let f=document.getElementById('flash'); if(!f){f=document.createElement('div');f.id='flash';document.body.appendChild(f)}
+  f.className=''; void f.offsetWidth; f.className=ok?'g':'r';
+}
+function comboBanner(n){
+  chime(); if(reducedMotion()) return;
+  document.querySelectorAll('.combo').forEach(e=>e.remove());
+  const c=document.createElement('div'); c.className='combo'; c.setAttribute('role','status');
+  c.textContent=(n>=10?'🔥🔥 ':'🔥 ')+'ถูกติดกัน '+n+' ข้อ!'; document.body.appendChild(c); setTimeout(()=>c.remove(),1800);
+}
+/* count numbers up from 0 (final value is already in the DOM, so no-JS / reduced motion shows it directly) */
+function countUp(root){
+  if(reducedMotion()) return;
+  root.querySelectorAll('[data-count]').forEach(el=>{const to=+el.dataset.count;if(!(to>0))return;const t0=performance.now(),D=950;el.textContent='0';
+    const step=now=>{const k=Math.min(1,(now-t0)/D),e=1-Math.pow(1-k,3);el.textContent=String(Math.round(to*e));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)});
+}
+/* card tilt + spotlight (mouse/trackpad only) */
+function enableTilt(root){
+  if(reducedMotion()||!(window.matchMedia&&matchMedia('(hover: hover) and (pointer: fine)').matches)) return;
+  root.querySelectorAll('.topic').forEach(card=>{
+    card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      card.classList.add('tilting');card.style.setProperty('--mx',(px*r.width)+'px');card.style.setProperty('--my',(py*r.height)+'px');
+      card.style.setProperty('--ry',((px-.5)*7).toFixed(2)+'deg');card.style.setProperty('--rx',((.5-py)*6).toFixed(2)+'deg')});
+    card.addEventListener('pointerleave',()=>{card.classList.remove('tilting');card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg')});
+  });
+}
+const MEDAL={gold:['#FFE7A6','#E8A317','#B87A00'],silver:['#FFFFFF','#AEB9DA','#6F7DA6'],green:['#B8FFE4','#2EE6A0','#13895E']};
+function medalSVG(kind){
+  const [a,b,c]=MEDAL[kind];
+  return `<svg class="medal" viewBox="0 0 84 104" aria-hidden="true"><defs><linearGradient id="mg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${a}"/><stop offset=".55" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></linearGradient>
+  <clipPath id="mc"><circle cx="42" cy="62" r="30"/></clipPath></defs>
+  <path d="M22 4h16l10 34H32z" fill="#FF4D6A"/><path d="M62 4H46L36 38h16z" fill="#7C6CFF"/>
+  <circle cx="42" cy="62" r="34" fill="${c}"/><circle cx="42" cy="62" r="30" fill="url(#mg)"/><circle cx="42" cy="62" r="23" fill="none" stroke="rgba(255,255,255,.55)" stroke-width="2"/>
+  <path d="M42 46l4.7 9.6 10.5 1.5-7.6 7.4 1.8 10.5L42 70l-9.4 5 1.8-10.5-7.6-7.4 10.5-1.5z" fill="rgba(255,255,255,.92)"/>
+  <g clip-path="url(#mc)"><g transform="rotate(25 42 62)"><rect class="shine" x="10" y="20" width="16" height="90" fill="rgba(255,255,255,.45)"/></g></g></svg>`;
+}
+
 /* =================== screens =================== */
 const HUES=[['#7C6CFF','#4D8DFF'],['#22C3FF','#2EE6A0'],['#FF7A59','#FFC94A'],['#FF4D9A','#B26CFF'],['#2EE6A0','#9BEA4A']];
 const TAGS={'m4-1':'How?','m4-2':'How often?','m4-3':'How much?','m4-4':'When?','m4-5':'Where?',
@@ -407,13 +691,13 @@ let keyHandler=null;
 document.addEventListener('keydown',e=>{if(keyHandler&&!e.metaKey&&!e.ctrlKey&&!e.altKey)keyHandler(e)});
 function setFoot(show){keyHandler=null;const f=$('#foot');if(f)f.classList.toggle('hidden',!show)}
 function syncLabel(){return GAS_URL?(S&&S.pending?'มีคะแนนที่ยังไม่ได้ส่ง':(syncState||'เชื่อมต่อระบบของครูแล้ว')):'โหมดออฟไลน์ คะแนนอยู่ในเครื่องนี้'}
+function rankOf(pass,total){if(!total)return '';if(pass===total)return '👑 ผู้พิชิต 0/ร';if(pass>0)return '⚔️ นักล่าด่าน';return '🌱 ผู้เริ่มต้น'}
 function markHTML(allPass,pass,total,user){
   const ring=total?`<div class="bigring" style="--p:${Math.round(pass*100/total)}" aria-label="ผ่าน ${pass} จาก ${total} ด่าน"><div><b>${pass}/${total}</b><small>ด่านที่ผ่าน</small></div></div>`:'';
-  const who=user?`<div class="who"><span class="chip"><b>${esc(user.first)} ${esc(user.last)}</b></span><span class="chip">ม.${esc(user.grade)}/${esc(user.room)} เลขที่ ${esc(user.no)}</span><span class="chip sync${S&&S.pending?' bad':''}" id="sync">${esc(syncLabel())}</span></div>`:'';
-  return `<header class="mark gborder"><div class="grade" aria-hidden="true">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg>${allPass?'<span class="stamp">ผ่าน</span>':''}</div>
+  const who=user?`<div class="who"><span class="chip rank">${rankOf(pass,total)}</span><span class="chip"><b>${esc(user.first)} ${esc(user.last)}</b></span><span class="chip">ม.${esc(user.grade)}/${esc(user.room)} เลขที่ ${esc(user.no)}</span><span class="chip sync${S&&S.pending?' bad':''}" id="sync">${esc(syncLabel())}</span></div>`:'';
+  return `<header class="mark gborder"><div class="gwrap"><span class="halo" aria-hidden="true"></span><div class="grade" aria-hidden="true">0/ร<svg viewBox="0 0 100 60" preserveAspectRatio="none"><path d="M4 50 L96 12"/></svg>${allPass?'<span class="stamp">ผ่าน</span>':''}</div></div>
   <div class="htext">${user?`<span class="hello">สวัสดี ${esc(user.first)} พร้อมแก้ 0/ร หรือยัง</span>`:''}<h1>ระบบแก้ 0/ร</h1><p>ฝึกทำแบบฝึกหัดให้ผ่านเกณฑ์ ${PASS_PERCENT}% ครบทุกด่าน</p>${who}</div>${ring}</header>`;
 }
-
 function renderRegister(msg){
   inQuiz=false; setFoot(true);
   const roomOpts=Array.from({length:ROOMS},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
@@ -498,15 +782,22 @@ function renderHub(){
   const allPass=passCount===list.length&&list.length>0;
   const maxAll=list.reduce((s,t)=>s+BANK[t.id].length,0), bestAll=list.reduce((s,t)=>s+(T(t.id).best||0),0);
   const rounds=list.reduce((s,t)=>s+(T(t.id).attempts||0),0);
+  const going=list.find(t=>{const r=T(t.id).run;return r&&!r.done&&r.answers.length>0});
+  const nextT=going||list.find(t=>!isPass(T(t.id).best,BANK[t.id].length));
+  const jp=list.length?Math.round(passCount*100/list.length):0;
+  const nodeCls=t=>{const done=isPass(T(t.id).best,BANK[t.id].length);return done?'done':(going&&t.id===going.id?'going':(nextT&&t.id===nextT.id?'next':''))};
   app.innerHTML=`${markHTML(allPass,passCount,list.length,u)}
   <div class="tiles">
-    <div class="tile${allPass?' good':''}"><small>ผ่านแล้ว</small><b>${passCount}<span> จาก ${list.length} ด่าน</span></b></div>
-    <div class="tile gold"><small>คะแนนรวม</small><b>${bestAll}<span> / ${maxAll}</span></b></div>
-    <div class="tile"><small>ทำไปแล้ว</small><b>${rounds}<span> รอบ</span></b></div>
+    <div class="tile${allPass?' good':''}"><span class="ti" aria-hidden="true">🏁</span><div><small>ผ่านแล้ว</small><b>${passCount}<span> จาก ${list.length} ด่าน</span></b></div></div>
+    <div class="tile gold"><span class="ti" aria-hidden="true">⭐</span><div><small>คะแนนรวม</small><b>${bestAll}<span> / ${maxAll}</span></b></div></div>
+    <div class="tile"><span class="ti" aria-hidden="true">🔁</span><div><small>ทำไปแล้ว</small><b>${rounds}<span> รอบ</span></b></div></div>
   </div>
-  ${allPass?'<div class="banner"><span class="bi">🏆</span><span>ผ่านครบทุกด่านแล้ว แจ้งครูได้เลย หรือจะทำซ้ำเพื่อทบทวนก็ได้</span></div>':''}
-  <div class="ledger">${list.map(topicRow).join('')}</div>`;
+  ${allPass?`<div class="banner"><span class="bi">🏆</span><span><strong>ผู้พิชิต 0/ร ม.${esc(u.grade)}</strong>ผ่านครบทุกด่านแล้ว แจ้งครูได้เลย หรือจะทำซ้ำเพื่อทบทวนก็ได้</span></div>`:''}
+  <nav class="mapstrip" aria-label="แผนที่ด่าน"><span class="ms-line"><i style="width:${jp}%"></i></span>${list.map((t,i)=>{const c=nodeCls(t);return `<button type="button" class="ms-node ${c}" style="${hueVars(t.id)}" data-jump="${t.id}" aria-label="ไปที่ด่าน ${i+1}">${c==='done'?'✓':i+1}</button>`}).join('')}</nav>
+  <div class="ledger journey" style="--jp:${jp}"><span class="track" aria-hidden="true"><i></i></span>${list.map((t,i)=>{const c=nodeCls(t);return `<div class="stage${i%2?' r':''}" id="st-${t.id}" style="${hueVars(t.id)}"><span class="node ${c}" aria-hidden="true">${c==='done'?'✓':i+1}</span>${topicRow(t)}</div>`}).join('')}</div>`;
   app.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>startTopic(b.dataset.go,b.dataset.mode==='new')));
+  app.querySelectorAll('[data-jump]').forEach(b=>b.addEventListener('click',()=>{const el=document.getElementById('st-'+b.dataset.jump);if(el)el.scrollIntoView({behavior:reducedMotion()?'auto':'smooth',block:'center'})}));
+  enableTilt(app);
   if(S.pending) sync();
 }
 function topicRow(t){
@@ -561,7 +852,7 @@ function renderQuestion(id){
   const sk=streakOf(run);
   app.innerHTML=`<div class="qtop" style="${hueVars(id)}"><button class="btn small ghost" id="back">กลับหน้าหลัก</button>
     <div class="qmeta"><span class="tname">${esc(topic.name)}</span><span class="count">ข้อ ${pos+1} / ${total}</span></div>
-    <span class="qright">${sk>=3?`<span class="streak">🔥 ${sk}</span>`:''}<span>ถูก <b>${run.correct}</b></span></span>
+    <span class="qright">${sk>=3?`<span class="streak${sk>=10?' s10':(sk>=5?' s5':'')}">🔥 ${sk}</span>`:''}<span>ถูก <b>${run.correct}</b></span></span>
     <div class="prog" aria-hidden="true"><i style="width:${pos*100/total}%"></i></div></div>
   <div class="ticks" aria-hidden="true">${ticks}</div>
   <div class="sheet qcard" style="${hueVars(id)}">
@@ -580,7 +871,8 @@ function renderQuestion(id){
     run.answers.push({i:run.order[pos],c:chosen,ok}); if(ok) run.correct++;
     persist();
     app.querySelectorAll('.opt').forEach(x=>{x.disabled=true;const v=opts[+x.dataset.i];if(v===item.a)x.classList.add('right');else if(x===b)x.classList.add('wrong')});
-    beep(ok);
+    beep(ok); flash(ok); burst(b,ok);
+    if(ok){const sk2=streakOf(run);if(sk2>=5&&sk2%5===0) comboBanner(sk2)}
     const expl=item.n||topic.rule;
     $('#fbBox').innerHTML=`<div class="fb${ok?' good':''}"><span class="fbicon" aria-hidden="true">${ok?'✓':'✕'}</span><div><b class="${ok?'good-t':'bad-t'}">${ok?'ถูกต้อง':'ยังไม่ถูก คำตอบคือ '+esc(item.a)}</b><p>${esc(expl)}</p></div></div>
       <div class="nextbar"><span class="kbd">กด <kbd>Enter</kbd></span><button class="btn" id="next">${pos+1>=total?'ดูผลคะแนน':'ข้อต่อไป'}</button></div>`;
@@ -604,13 +896,14 @@ function renderQuestion(id){
 }
 
 function streakOf(run){let k=0;for(let i=run.answers.length-1;i>=0&&run.answers[i].ok;i--)k++;return k}
-function confetti(){
-  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+function confetti(big){
+  if(reducedMotion())return;
   const c=document.createElement('canvas');c.id='confetti';document.body.appendChild(c);
   let x=null;try{x=c.getContext('2d')}catch(e){}if(!x){c.remove();return}
-  const W=c.width=innerWidth,H=c.height=innerHeight,cols=['#2EE6A0','#FFC94A','#7C6CFF','#FF4D6A','#4D8DFF','#fff'];
-  const P=Array.from({length:170},()=>({x:W/2,y:H*.35,vx:(Math.random()-.5)*16,vy:Math.random()*-14-4,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)]}));
-  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++t<150)requestAnimationFrame(f);else c.remove()})();
+  const W=c.width=innerWidth,H=c.height=innerHeight,cols=['#2EE6A0','#FFC94A','#7C6CFF','#FF4D6A','#4D8DFF','#22C3FF','#fff'];
+  const P=[],origins=big?[[.5,.35,0],[.18,.55,22],[.82,.55,22],[.5,.25,48]]:[[.5,.35,0]];
+  origins.forEach(([ox,oy,delay])=>{for(let i=0;i<(big?130:160);i++)P.push({d:delay,x:W*ox,y:H*oy,vx:(Math.random()-.5)*16,vy:Math.random()*-14-4,s:Math.random()*7+4,r:Math.random()*6,vr:(Math.random()-.5)*.3,c:cols[Math.floor(Math.random()*cols.length)]})});
+  let t=0;(function f(){x.clearRect(0,0,W,H);P.forEach(p=>{if(t<p.d)return;p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);x.restore()});if(++t<(big?210:150))requestAnimationFrame(f);else c.remove()})();
 }
 function tierOf(pct,passed){
   if(pct>=90) return '🏆 ยอดเยี่ยม';
@@ -630,25 +923,28 @@ function finishTopic(id){
   const wrong=run.answers.filter(a=>!a.ok);
   const lv={1:[0,0],2:[0,0],3:[0,0]};
   run.answers.forEach(a=>{const it=BANK[id][a.i];if(it&&lv[it.l]){lv[it.l][1]++;if(a.ok)lv[it.l][0]++}});
-  const c=passed?'#2EE6A0':'#FF4D6A';
+  const c=pct>=90?'#FFC94A':(passed?'#2EE6A0':'#FF4D6A');
+  const medal=pct>=90?medalSVG('gold'):(pct>=75?medalSVG('silver'):(passed?medalSVG('green'):''));
   app.innerHTML=`<div class="sheet result" style="${hueVars(id)};--c:${c}">
-    <div class="resultTop"><div class="scorering" style="--p:${pct}"><div><div class="score">${run.correct}<small>/${total}</small></div><span class="muted" style="font-size:14px">${pct}%</span></div></div>
-    <div><p class="muted" style="margin:0">${esc(topic.name)} รอบที่ ${run.attempt}</p>
-    <span class="tier">${tierOf(pct,passed)}</span>
-    <h2 style="font-size:28px;margin:2px 0 6px;color:${passed?'var(--pass)':'#FF9AAE'}">${passed?'ผ่านเกณฑ์ '+PASS_PERCENT+'% แล้ว':'ยังไม่ถึงเกณฑ์ '+PASS_PERCENT+'%'}</h2>
-    <p class="muted" style="margin:0;font-size:15px">${passed?'':'ทำใหม่ได้ไม่จำกัด ระบบเก็บคะแนนที่ดีที่สุดไว้ '}คะแนนดีที่สุดของด่านนี้ ${st.best}/${total}</p></div></div>
-    <div class="tiles"><div class="tile good"><small>ตอบถูก</small><b>${run.correct}</b></div><div class="tile bad"><small>ตอบผิด</small><b>${wrong.length}</b></div>
-      <div class="tile"><small>ความแม่นยำ</small><b>${pct}<span>%</span></b></div><div class="tile gold"><small>ดีที่สุด</small><b>${st.best}<span> / ${total}</span></b></div></div>
+    <div class="ceremony">
+      <div class="stagec">${passed?'<span class="rays" aria-hidden="true"></span>':''}
+        <div class="scorering" style="--p:${pct}"><div><div class="score"><span class="num" data-count="${run.correct}">${run.correct}</span><small>/${total}</small></div><span class="muted" style="font-size:14px">${pct}%</span></div></div>${medal}</div>
+      <span class="tier">${tierOf(pct,passed)}</span>
+      <h2 style="color:${passed?(pct>=90?'var(--gold)':'var(--pass)'):'#FF9AAE'}">${passed?'ผ่านเกณฑ์ '+PASS_PERCENT+'% แล้ว':'ยังไม่ถึงเกณฑ์ '+PASS_PERCENT+'%'}</h2>
+      <p class="rmeta">${esc(topic.name)} รอบที่ ${run.attempt}<br>${passed?'':'ทำใหม่ได้ไม่จำกัด ระบบเก็บคะแนนที่ดีที่สุดไว้ '}คะแนนดีที่สุดของด่านนี้ ${st.best}/${total}</p>
+    </div>
+    <div class="tiles"><div class="tile good"><small>ตอบถูก</small><b><span class="num" data-count="${run.correct}">${run.correct}</span></b></div><div class="tile bad"><small>ตอบผิด</small><b><span class="num" data-count="${wrong.length}">${wrong.length}</span></b></div>
+      <div class="tile"><small>ความแม่นยำ</small><b><span class="num" data-count="${pct}">${pct}</span><span>%</span></b></div><div class="tile gold"><small>ดีที่สุด</small><b><span class="num" data-count="${st.best}">${st.best}</span><span> / ${total}</span></b></div></div>
     <div class="lvlbars">${[1,2,3].map(l=>{const [r,n]=lv[l];return n?`<div class="lb l${l}"><span>${LVL[l]}</span><span class="bar"><i style="width:${Math.round(r*100/n)}%"></i></span><span>${r}/${n}</span></div>`:''}).join('')}</div>
     <div class="actions"><button class="btn${passed?' ghost':' pen'}" id="again">ทำด่านนี้ใหม่</button><button class="btn${passed?'':' ghost'}" id="home">กลับหน้าหลัก</button></div>
     ${wrong.length?`<h3 class="sec-h">ข้อที่ตอบผิด ${wrong.length} ข้อ</h3><div class="review">${wrong.map(a=>{const it=BANK[id][a.i];return `<div class="rv">${it.p?`<details><summary>ดูบทความ / บทสนทนา</summary>${passageHTML(it)}</details>`:''}<div class="qtext">${fmtQ(it.q)}</div><div class="rvl"><span class="rk">เราตอบ</span><span class="yours">${esc(a.c)}</span></div><div class="rvl"><span class="rk">ที่ถูก</span><span class="ans">${esc(it.a)}</span></div>${it.n?`<div class="rvn">💡 ${esc(it.n)}</div>`:''}</div>`}).join('')}</div>`:'<p style="margin-top:20px">ไม่มีข้อผิดเลย 🎉</p>'}
   </div>`;
-  if(passed&&!run.celebrated){run.celebrated=true;persist();confetti()}
+  countUp(app);
+  if(passed&&!run.celebrated){run.celebrated=true;persist();confetti(pct>=90);fanfare()}
   $('#again').addEventListener('click',()=>startTopic(id,true));
   $('#home').addEventListener('click',renderHub);
   window.scrollTo(0,0);
 }
-
 function showLocked(kind){
   inQuiz=false; setFoot(true);
   app.innerHTML=`${markHTML(false)}<div class="sheet lock"><h2>🔒 เข้าใช้งานจากเครื่องนี้ไม่ได้</h2>
@@ -764,6 +1060,7 @@ async function boot(){
   }
   renderHub();
 }
+playIntro();
 if(!BANK){app.textContent='ไม่พบคลังข้อสอบ'}else boot();
 </script>
 </body>
